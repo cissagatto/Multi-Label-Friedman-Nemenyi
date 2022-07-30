@@ -17,9 +17,9 @@ This source code has the following R scripts
 
 The R ranking script generates the rankings for each of the multi-label measures according to their maximum value. If the best result for the measure is ZERO, the ranking will be generated accordingly. If the best result for the measure is ONE, the ranking will be generated accordingly.
 
-The Friedman-Nemenyi V1 script uses the utils package, while Friedman-Nemenyi_v2 uses the scamp package.
+The Friedman-Nemenyi V1 script uses the *tsutils* package, while Friedman-Nemenyi_v2 uses the *scmamp* package.
 
-This source code does not provide the installation of any of the packages used, therefore, you must install the libraries used. Check the R LIBRARIE.R script
+This source code does not provide the installation of any of the packages used, therefore, you must install the libraries used. Check the R libraries.R script.
 
 The scmamp package can give some installation headaches. For newer versions of R it is not available, so it is necessary to force the installation manually. Consult [here](https://github.com/b0rxa/scmamp) and [here] (http://cran.nexr.com/web/packages/scmamp/index.html) all necessary dependencies and I suggest you to install via files.
 
