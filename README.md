@@ -37,7 +37,6 @@ The CSV file format of the assessment measure should be as follows:
 | dataset_1 |          |          |      |          |
 | ......... |          |          |      |          |
 | dataset_n |          |          |      |          |
-|-----------|----------|----------|------|----------|
 
   
 
