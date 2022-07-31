@@ -27,84 +27,95 @@ FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
 
 
 ##############################################################################
-# IF YOU NEED, HERE THE VECTORS WITH THE MEASURES
-##############################################################################
-
-multilabel_measures <- function(){
-  retorno = list()
-  
-  multilabel_measures_names_0 =  c("clp", "coverage", "hamming-loss",
-                                   "margin-loss", "mlp", "one-error",
-                                   "ranking-loss", "wlp")
-  
-  multilabel_measures_names_1 =  c("accuracy", "average-precision", "f1", 
-                                   "macro-auc", "macro-f1", "macro-precision",
-                                   "macro-recall", "micro-auc", "micro-f1",
-                                   "micro-precision", "micro-recall", "precision",        
-                                   "recall", "subset-accuracy")
-  
-  names = c("accuracy", "average-precision", "clp", "coverage", 
-            "f1", "hamming-loss", "macro-auc", "macro-f1", 
-            "macro-precision", "macro-recall", "margin-loss", "micro-auc", 
-            "micro-f1", "micro-precision", "micro-recall", "mlp", 
-            "one-error", "precision", "ranking-loss", "recall", 
-            "subset-accuracy", "wlp")
-  
-  values = c(1,1,0,0,
-             1,0,1,1,
-             1,1,0,1,
-             1,1,1,0,
-             0,1,0,1,
-             1,0)
-  
-  measures = data.frame(names, values)
-  
-  retorno$measures = measures
-  retorno$multilabel_measures_names_0 = multilabel_measures_names_0
-  retorno$multilabel_measures_names_1 = multilabel_measures_names_1
-  retorno$names = names
-  retorno$values = values
-  
-  return(retorno)
-}
-
-
-##############################################################################
 #
 ##############################################################################
-RemoveCSV <- function(files){
-  files2 = files
-  j = 0
-  for(j in 1:length(files2)){
-    a = str_length(files2[j])
-    a = a - 4
-    files2[j] = str_sub(files2[j], end = a)
-    j = j + 1
-    gc()
-  }
-  return(files2)
+setwd(FolderScripts)
+source("libraries.R")
+
+setwd(FolderScripts)
+source("utils.R")
+
+setwd(FolderScripts)
+source("radar_plots.R")
+
+
+##############################################################################
+# CALLING MULTILABEL MEASURES FUNCTION - UTILS.R
+##############################################################################
+measures = multilabel_measures()
+
+
+##############################################################################
+# DIRECTORIES
+##############################################################################
+FolderPlots = "~/Multi-Label-Friedman-Nemenyi/RadarPlots"
+if(dir.exists(FolderPlots)==FALSE){dir.create(FolderPlots)}
+
+Folder_I = paste(FolderPlots, "/Individual", sep="")
+if(dir.exists(Folder_I)==FALSE){dir.create(Folder_I)}
+
+Folder_A = paste(FolderPlots, "/All", sep="")
+if(dir.exists(Folder_A)==FALSE){dir.create(Folder_A)}
+
+FolderData = paste(FolderRoot, "/Data", sep="")
+folder_names = dir(FolderData)
+
+Folder = paste(FolderData, "/", folder_names[2], sep="")
+files_names = c(dir(Folder))
+files_measures_names = RemoveCSV(files_names)
+
+# MY METHODS TO COMPARE
+my_methods = c("Datasets", "G.C", "L.C", 
+                    "H.JmaC", "H.JmiC", "H.JSC", 
+                    "H.KmaC", "H.KmiC", "H.KSC",
+                    "E.MaC", "E.MiC", 
+                    "O.MaC", "O.MiC", 
+                    "R1.MaC", "R1.MiC", "R1.SC", 
+                    "R2.MaC", "R2.MiC", "R2.SC", 
+                    "R3.C")
+
+# FOR THE FIRST MEASURE TO THE LAST
+a = 1
+while(a<=length(files_names)){
+  
+  setwd(FolderData)
+  cat("\nMeasure: \t", files_names[a])
+
+  # open file
+  str = paste(Folder, "/", files_names[a], sep="")
+  data = data.frame(read.csv2(str))
+  
+  # changing coluns names
+  colnames(data) = my_methods
+  
+  # I dont need the 3 e 4 rows 
+  data = data[c(-3,-4),]
+  
+  # getting the datasets names
+  datasets_names = data$Datasets
+  
+  # I dont need the first coluns
+  data = data[,-1]
+  
+  # total coluns
+  b = ncol(data)
+  
+  # build the data frame with max and min
+  d <- rbind(rep(1.0,b), rep(0.0,b), data)
+  rownames(d) = c("max", "min", datasets_names)
+  
+  Folder_1 = paste(Folder_I, "/", measures$names[a], sep="")
+  if(dir.exists(Folder_1)==FALSE){dir.create(Folder_1)}
+ 
+  cat("\n PRINT INDIVIDUALLY - ONE RADAR FOR EACH DATASET")
+  radar_plot_1(length(datasets_names), d, datasets_names, Folder_1)
+  
+  Folder_2 = paste(Folder_A, "/",  measures$names[a], sep="")
+  if(dir.exists(Folder_2)==FALSE){dir.create(Folder_2)}
+  
+  cat("\n PRINT ALL DATASET IN ONE PLOT")
+  radar_plot_2(4,2, df1, datasets_names, Folder_2)
+  
+  a = a + 1
+  gc()
 }
-
-
-
-##############################################################################
-#
-##############################################################################
-RemoveR <- function(files){
-  files2 = files
-  j = 0
-  for(j in 1:length(files2)){
-    a = str_length(files2[j])
-    a = a - 12
-    files2[j] = str_sub(files2[j], end = a)
-    j = j + 1
-    gc()
-  }
-  return(files2)
-}
-
-
-
-##############################################################################
-#
-##############################################################################

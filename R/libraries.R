@@ -19,10 +19,11 @@
 ###############################################################################
 
 
-
+##############################################################################
+#
+##############################################################################
 FolderRoot = "~/Multi-Label-Friedman-Nemenyi"
 FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
-
 
 
 # INSTALL THIS TO USE SCMAMP
@@ -38,3 +39,25 @@ library(dplyr)
 library(stringr)
 library(tsutils)
 library(scmamp)
+library(rstatix)
+library(ggradar)
+library(RColorBrewer)
+library(wesanderson)
+library(tidyverse)
+library(Rgraphviz)
+library(fmsb)
+library(unikn)
+library(scmamp)
+library(ggplot2)
+library(ggpubr)
+library(rstatix)
+library(viridis)
+library(purrr)
+library(scales)
+library(tibble)
+
+
+
+##############################################################################
+#
+##############################################################################

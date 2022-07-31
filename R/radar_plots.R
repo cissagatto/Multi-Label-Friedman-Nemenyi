@@ -25,86 +25,105 @@
 FolderRoot = "~/Multi-Label-Friedman-Nemenyi"
 FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
 
+##############################################################################
+#
+##############################################################################
+cores = seecol(pal_unikn_pref, 22)
+a <- c(1:22)
+cores2 <- colorRampPalette(c("red","yellow")) # Degradê de vermelho para amarelo
+
+
 
 ##############################################################################
-# IF YOU NEED, HERE THE VECTORS WITH THE MEASURES
+#
 ##############################################################################
-
-multilabel_measures <- function(){
-  retorno = list()
-  
-  multilabel_measures_names_0 =  c("clp", "coverage", "hamming-loss",
-                                   "margin-loss", "mlp", "one-error",
-                                   "ranking-loss", "wlp")
-  
-  multilabel_measures_names_1 =  c("accuracy", "average-precision", "f1", 
-                                   "macro-auc", "macro-f1", "macro-precision",
-                                   "macro-recall", "micro-auc", "micro-f1",
-                                   "micro-precision", "micro-recall", "precision",        
-                                   "recall", "subset-accuracy")
-  
-  names = c("accuracy", "average-precision", "clp", "coverage", 
-            "f1", "hamming-loss", "macro-auc", "macro-f1", 
-            "macro-precision", "macro-recall", "margin-loss", "micro-auc", 
-            "micro-f1", "micro-precision", "micro-recall", "mlp", 
-            "one-error", "precision", "ranking-loss", "recall", 
-            "subset-accuracy", "wlp")
-  
-  values = c(1,1,0,0,
-             1,0,1,1,
-             1,1,0,1,
-             1,1,1,0,
-             0,1,0,1,
-             1,0)
-  
-  measures = data.frame(names, values)
-  
-  retorno$measures = measures
-  retorno$multilabel_measures_names_0 = multilabel_measures_names_0
-  retorno$multilabel_measures_names_1 = multilabel_measures_names_1
-  retorno$names = names
-  retorno$values = values
-  
-  return(retorno)
+create_beautiful_radarchart <- function(data, color = cores3,
+                                        vlabels = colnames(data),
+                                        vlcex = 0.7,
+                                        caxislabels = NULL,
+                                        title = NULL, ...){
+  radarchart(
+    
+    data, axistype = 1,
+    
+    # Customize the polygon
+    pcol = color,
+    pfcol = scales::alpha(color, 0.1),
+    plwd = 2, 
+    plty = 1,
+    
+    # Customize the grid
+    cglcol = "grey", cglty = 1, cglwd = 0.8,
+    
+    # Customize the axis
+    # axislabcol = color,
+    axislabcol = "black",
+    
+    # Variable labels
+    vlcex = vlcex, 
+    vlabels = vlabels,
+    caxislabels = caxislabels, 
+    title = title, ...
+  )
 }
 
 
 ##############################################################################
 #
 ##############################################################################
-RemoveCSV <- function(files){
-  files2 = files
-  j = 0
-  for(j in 1:length(files2)){
-    a = str_length(files2[j])
-    a = a - 4
-    files2[j] = str_sub(files2[j], end = a)
-    j = j + 1
+radar_plot_1 <- function(g, df, name, folder){
+  
+  i = 1
+  for(i in 1:g) {
+    cat("\n\n Radar Graph: \t", name[i])
+    colors <- cores
+    setwd(folder)
+    pdf(paste(name[i], ".pdf", sep=""), width = 6, height = 6)
+    op <- par(mar = c(1, 2, 2, 1))
+    create_beautiful_radarchart(d[c(1, 2, i+2), ],
+                                caxislabels = seq(0.0,1.0,0.2),
+                                color = colors[i], title = name[i])
+    # color = colors[i]
+    print(par(op))
+    dev.off()
+    cat("\n")
+    i = i + 1
     gc()
   }
-  return(files2)
 }
-
-
 
 ##############################################################################
 #
 ##############################################################################
-RemoveR <- function(files){
-  files2 = files
-  j = 0
-  for(j in 1:length(files2)){
-    a = str_length(files2[j])
-    a = a - 12
-    files2[j] = str_sub(files2[j], end = a)
-    j = j + 1
+radar_plot_2 <- function(x,y,df,name,folder){
+  
+  colors <- cores
+  setwd(folder)
+  pdf("all.pdf", width = 5, height = 10)
+  
+  # Reduce plot margin using par()
+  op <- par(mar = c(1, 1, 1, 1), oma=c(1,1,1,1))
+  par(mfrow = c(x,y))
+  
+  # Create the radar chart
+  i = 1
+  for(i in 1:(x*y)){
+    create_beautiful_radarchart(
+      data = d[c(1, 2, i+2), ], caxislabels = seq(0,1.0,0.2),
+      color = colors[i], title = name[i]
+    )
+    i = i + 1
     gc()
   }
-  return(files2)
+  par(op)
+  print(par(op))
+  dev.off()
+  cat("\n")
 }
-
 
 
 ##############################################################################
 #
 ##############################################################################
+
+

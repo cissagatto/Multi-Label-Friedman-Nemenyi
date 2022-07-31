@@ -108,6 +108,7 @@ Friedman_Nemenyi_v2 <- function(path, name_dir){
     
     arquivo = paste(path, "/", rank[i], sep="")
     Ranking = data.frame(read.csv(arquivo))
+    ncol(Ranking)
     
     # friedman
     fr = friedmanTest(Ranking)
@@ -173,3 +174,6 @@ Friedman_Nemenyi_v2 <- function(path, name_dir){
 }
 
 
+##############################################################################
+#
+##############################################################################
