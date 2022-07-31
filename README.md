@@ -17,7 +17,6 @@ This source code has the following R scripts
 ## BEFORE RUNNING
 The *ranking.R* generates the rankings for each of the multilabel measures according to their best value as follow:
 
-|-------------------|------------|
 | Measure           | Best Value |
 |-------------------|------------|
 | accuracy          |     1.0    |
@@ -53,14 +52,13 @@ The scmamp package can give some installation headaches. For newer versions of R
 # CSV FILES
 For this code to work correctly, the files must be provided in CSV format. This code was developed to work with the 22 multi-label assessment measures. You can provide just one CSV file, or all 22 files (one for each measure). The CSV file format of the assessment measure should be as follows:
 
-|-----------|----------|----------|------|----------|
 | Dataset   | Method_1 | Method_2 | .... | Method_n |
 |-----------|----------|----------|------|----------|
 | dataset_1 |          |          |      |          |
 | dataset_1 |          |          |      |          |
 | ......... |          |          |      |          |
 | dataset_n |          |          |      |          |
-|-----------|----------|----------|------|----------|
+
   
 
 Along with this code are provided examples of csv files in the DATA folder
