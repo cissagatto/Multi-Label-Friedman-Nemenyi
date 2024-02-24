@@ -26,47 +26,16 @@ FolderRoot = "~/Multi-Label-Friedman-Nemenyi"
 FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
 
 
-# INSTALL THIS TO USE SCMAMP
-#if (!require("BiocManager", quietly = TRUE))
-#  install.packages("BiocManager")
-#BiocManager::install("graph")
-#if (!require("BiocManager", quietly = TRUE))
-#  install.packages("BiocManager")
-#BiocManager::install("Rgraphviz")
-# 
-# if (!require("devtools")) {
-#   install.packages("devtools")
-# }
-# devtools::install_github("b0rxa/scmamp")
-# 
-# devtools::install_github("ricardo-bion/ggradar", 
-#                          dependencies = TRUE)
-
-
-library(gplots)
-library(pheatmap)
-library(ggstatsplot)
-library(dplyr)
-library(stringr)
-library(tsutils)
-library(scmamp)
-library(rstatix)
-library(ggradar)
-library(RColorBrewer)
-library(wesanderson)
-library(tidyverse)
-#library(Rgraphviz)
-library(fmsb)
-library(unikn)
-library(ggplot2)
-library(ggpubr)
-library(viridis)
-library(purrr)
-library(scales)
-library(tibble)
-
-
-
 ##############################################################################
 #
 ##############################################################################
+setwd(FolderScripts)
+source("libraries.R")
+
+setwd(FolderScripts)
+source("utils.R")
+
+origem = "/home/biomal/Multi-Label-Friedman-Nemenyi/Analysed"
+destino = "OneDrive:DOUTORADO/Results-Analyzed/Backup-3"
+string = paste("rclone copy -P ", origem, " ", destino, sep="")
+system(string)

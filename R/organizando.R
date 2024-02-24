@@ -26,47 +26,32 @@ FolderRoot = "~/Multi-Label-Friedman-Nemenyi"
 FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
 
 
-# INSTALL THIS TO USE SCMAMP
-#if (!require("BiocManager", quietly = TRUE))
-#  install.packages("BiocManager")
-#BiocManager::install("graph")
-#if (!require("BiocManager", quietly = TRUE))
-#  install.packages("BiocManager")
-#BiocManager::install("Rgraphviz")
-# 
-# if (!require("devtools")) {
-#   install.packages("devtools")
-# }
-# devtools::install_github("b0rxa/scmamp")
-# 
-# devtools::install_github("ricardo-bion/ggradar", 
-#                          dependencies = TRUE)
+
+##############################################################################
+# CALLING MULTILABEL MEASURES FUNCTION - UTILS.R
+##############################################################################
+res.mm = multilabel.measures()
+measures = res.mm$measures
 
 
-library(gplots)
-library(pheatmap)
-library(ggstatsplot)
-library(dplyr)
-library(stringr)
-library(tsutils)
-library(scmamp)
-library(rstatix)
-library(ggradar)
-library(RColorBrewer)
-library(wesanderson)
-library(tidyverse)
-#library(Rgraphviz)
-library(fmsb)
-library(unikn)
-library(ggplot2)
-library(ggpubr)
-library(viridis)
-library(purrr)
-library(scales)
-library(tibble)
-
+# MY METHODS TO COMPARE
+my.methods = c("Global", "Local", "ECC", "Standard", "Label", "Cluster", "Complete")
 
 
 ##############################################################################
-#
+# Generates rankings to be used in tests
 ##############################################################################
+pastas = list()
+
+FolderData = paste(FolderRoot, "/Data", sep="")
+pastas$FolderData = FolderData
+folder.names = dir(FolderData)
+
+FolderCC = paste(FolderData, "/Set-Up-7-d", sep="")
+pastas$FolderCC = FolderCC
+folder.names.cc = c(dir(FolderCC))
+
+Folder.CSVs = paste(FolderCC, "/CSVs", sep="")
+pastas$FolderCSVs = Folder.CSVs
+folder.names.csv = c(dir(Folder.CSVs))
+nomes = RemoveCSV(folder.names.csv)

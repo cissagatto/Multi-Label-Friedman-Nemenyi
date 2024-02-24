@@ -45,64 +45,93 @@ setwd(FolderScripts)
 source("Friedman-Nemenyi-v2.R")
 
 
+
 ##############################################################################
-# CALLING MULTILABEL MEASURES FUNCTION - UTILS.R
+# Please use the following names for the multi-label assessment measures
+#
+# accuracy
+# average-precision
+# clp
+# coverage
+# f1
+# hamming-loss
+# macro-auc
+# macro-f1
+# macro-precision
+# macro-recall     
+# margin-loss
+# micro-auc        
+# micro-f1
+# micro-precision  
+# micro-recall
+# mlp              
+# one-error
+# precision        
+# ranking-loss
+# recall           
+# subset-accuracy
+# wlp
+#
 ##############################################################################
-res_mm = multilabel_measures()
-measures = res_mm$measures
 
 
-# MY METHODS TO COMPARE
-my_methods = c("G.C", "L.C", 
-               "H.JmaC", "H.JmiC", "H.JSC", 
-               "H.KmaC", "H.KmiC", "H.KSC",
-               "E.MaC", "E.MiC", 
-               "O.MaC", "O.MiC", 
-               "R1.MaC", "R1.MiC", "R1.SC", 
-               "R2.MaC", "R2.MiC", "R2.SC", 
-               "R3.C")
+
+##############################################################################
+# IF YOU NEED, HERE THE VECTORS WITH THE MEASURES
+##############################################################################
+multilabel_measures_names_0 =  c("clp", "coverage", "hamming-loss",
+                                 "margin-loss", "mlp", "one-error",
+                                 "ranking-loss", "wlp")
+
+multilabel_measures_names_1 =  c("accuracy", "average-precision", "f1", 
+                                 "macro-auc", "macro-f1", "macro-precision",
+                                 "macro-recall", "micro-auc", "micro-f1",
+                                 "micro-precision", "micro-recall", "precision",        
+                                 "recall", "subset-accuracy")
+
+names = c("accuracy", "average-precision", "clp", "coverage", 
+          "f1", "hamming-loss", "macro-auc", "macro-f1", 
+          "macro-precision", "macro-recall", "margin-loss", "micro-auc", 
+          "micro-f1", "micro-precision", "micro-recall", "mlp", 
+          "one-error", "precision", "ranking-loss", "recall", 
+          "subset-accuracy", "wlp")
+
+values = c(1,1,0,0,
+           1,0,1,1,
+           1,1,0,1,
+           1,1,1,0,
+           0,1,0,1,
+           1,0)
+
+measures = data.frame(names, values)
 
 
 ##############################################################################
 # Generates rankings to be used in tests
 ##############################################################################
-FolderData = paste(FolderRoot, "/Data", sep="")
-folder_names = dir(FolderData)
-
-Folder = paste(FolderData, "/clus-exhaustive/csvs_datasets_methods", sep="")
-files_names = c(dir(Folder))
-files_measures_names = RemoveCSV(files_names)
+Folder = paste(FolderRoot, "/csvs", sep="")
+arquivos = c(dir(Folder))
+nomes_arquivos = RemoveCSV(arquivos)
 
 a = 1
-while(a<=length(files_names)){
+while(a<=length(arquivos)){
   
-  nome = paste(Folder, "/", files_names[a], sep="")
+  nome = paste(Folder, "/", arquivos[a], sep="")
   
   # read the files and format the dataframe
-  # use csv if the file uses comma
-  # use csv2 if the file uses dot comma
-  data = data.frame(read.csv2(nome))
-  
-  # I dont need the 3 and 4 rows
+  data = data.frame(read.csv(nome))
   data = data[c(-3,-4),]
-  
-  # I dont need the 1 colun
+  names(data)[1] = "dataset"
   data = data[,-1]
-  
-  # MY METHODS
-  colnames(data) = my_methods
-  
-  # coluns total
-  total_col = ncol(data)
   
   # generate the rankings for all csv files
   res = generate_ranking(data)
   
-  # what type of measure is??
-  val = filter(measures, measures$names== files_measures_names[a])
+  # 
+  val = filter(measures, measures$names== nomes_arquivos[a])
   
   #
-  str = paste(files_measures_names[a], "-ranking.csv", sep="")  
+  str = paste(nomes_arquivos[a], "-ranking.csv", sep="")  
   
   # create directory to store results
   pasta = paste(FolderRoot,"/Rankings", sep="")
@@ -112,18 +141,14 @@ while(a<=length(files_names)){
   if(dir.exists(pasta1)==FALSE){dir.create(pasta1)}
   
   if(val$values==1){
-    cat("\n1 \t", files_measures_names[a])
-    # for this measures you must use rank_average_1
-    # its equivalent to =ORDER.EQ(X;start:end;1) in excel
+    cat("\n1 \t", nomes_arquivos[a])
     setwd(pasta1)
-    write.csv(res$rank_average_0, str, row.names = FALSE)
+    write.csv(res$rank_average_1, str, row.names = FALSE)
     
   } else{
-    cat("\n0 \t", files_measures_names[a])
-    # for this measures you must use rank_min_0
-    # its equivalent to =ORDER.EQ(X;start:end;0) in excel
+    cat("\n0 \t", nomes_arquivos[a])
     setwd(pasta1)
-    write.csv(res$rank_average_1, str, row.names = FALSE)  
+    write.csv(res$rank_average_0, str, row.names = FALSE)  
   }
   
   a = a + 1
@@ -138,6 +163,7 @@ while(a<=length(files_names)){
 ##############################################################################
 
 # tsutils
+rm(name_dir, path)
 name_dir = "All_v1"
 path = paste(FolderRoot, "/Rankings/All", sep="")
 res1 = Friedman_Nemenyi_v1(path, name_dir)
@@ -152,10 +178,7 @@ res2 = Friedman_Nemenyi_v2(path, name_dir)
 ##############################################################################
 # 
 ##############################################################################
-FolderData = paste(FolderRoot, "/Data", sep="")
-folder_names = dir(FolderData)
-
-Folder_Origem = paste(FolderData, "/clus-exhaustive/csvs_datasets_methods", sep="")
+Folder_Origem = paste(FolderRoot, "/csvs", sep="")
 nomes_arquivos = c(dir(Folder_Origem))
 str = RemoveCSV(nomes_arquivos)
 
@@ -168,26 +191,26 @@ colunas_metodos = c("G.C", "L.C",
                   "R2.MaC", "R2.MiC", "R2.SC", 
                   "R3.C")
 
-sem_oracle = c(-11,-12)
+sem_oracle = colunas_metodos[c(-11,-12)]
 
-global_local_hybrid = c(1:8)
-global_local_exhaustive = c(1,2,9,10)
-global_local_oracle = c(1,2,11,12)
-global_local_random = c(1,2,13:19)
+global_local_hybrid = colunas_metodos[c(1:8)]
+global_local_exhaustive = colunas_metodos[c(1,2,9,10)]
+global_local_oracle = colunas_metodos[c(1,2,11,12)]
+global_local_random = colunas_metodos[c(1,2,13:19)]
 
-hybrid_exhaustive_oracle = c(3:8,9:12)
-random_exhaustive_oracle = c(13:19,9:12)
+hybrid_exhaustive_oracle = colunas_metodos[c(3:8,9:12)]
+random_exhaustive_oracle = colunas_metodos[c(13:19,9:12)]
 
-hybrid_global = c(3:8,1)
-hybrid_local = c(3:8,2)
-hybrid_exhaustive = c(3:8,9,10)
-hybrid_oracle = c(3:8,11,12)
-hybrid_random = c(3:8,13:19)
+hybrid_global = colunas_metodos[c(3:8,1)]
+hybrid_local = colunas_metodos[c(3:8,2)]
+hybrid_exhaustive = colunas_metodos[c(3:8,9,10)]
+hybrid_oracle = colunas_metodos[c(3:8,11,12)]
+hybrid_random = colunas_metodos[c(3:8,13:19)]
 
-random_global = c(13:19,1)
-random_local = c(13:19,2)
-random_exhaustive = c(13:19,9,10)
-random_oracle = c(13:19,11,12)
+random_global = colunas_metodos[c(13:19,1)]
+random_local = colunas_metodos[c(13:19,2)]
+random_exhaustive = colunas_metodos[c(13:19,9,10)]
+random_oracle = colunas_metodos[c(13:19,11,12)]
 
 Folders = c("sem_oracle", "global_local_hybrid", "global_local_exhaustive",
             "global_local_oracle", "global_local_random",
@@ -255,20 +278,12 @@ gera_rank_again(random_oracle, Folder_Origem,
 ##############################################################################
 j = 1
 while(j<=length(Folders)){
-  cat("\n\n================================================")
-  cat("\n", j, " - ", Folders[j])
-  cat("\n================================================\n\n")
-  
-  path_1 = paste(FolderRoot, "/Rankings/", Folders[j], sep="")
+  cat("\n\n", Folders[j])
+  path = paste(FolderRoot, "/Rankings/", Folders[j], sep="")
   name_dir_1 = paste(Folders[j], "_v1", sep="")
-  Friedman_Nemenyi_v1(path_1, name_dir_1)
-  
-  path_2 = paste(FolderRoot, "/Rankings/", Folders[j], sep="")
+  Friedman_Nemenyi_v1(path, name_dir_1)
   name_dir_2 = paste(Folders[j], "_v2", sep="")
-  Friedman_Nemenyi_v2(path_2, name_dir_2)
-  
-  rm(path_1, name_dir_1, path_2, name_dir_2)
-  
+  Friedman_Nemenyi_v2(path, name_dir_2)
   j = j + 1
   gc()
 }

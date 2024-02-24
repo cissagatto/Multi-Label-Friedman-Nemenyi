@@ -28,7 +28,7 @@ FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
 #if (!require("devtools")) {
 #  install.packages("devtools")
 #}
-#devtools::install_github("b0rxa/scmamp")
+#devtools::install.github("b0rxa/scmamp")
 
 #install.packages("BiocManager")
 #BiocManager::install("Rgraphviz")
@@ -36,14 +36,14 @@ FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
 ##############################################################################
 #
 ##############################################################################
-diretorios_2 <- function(name_dir){
+directories.2 <- function(name.dir, root.dir){
   
   retorno = list()
   
-  pasta = paste(FolderRoot,"/Analysis", sep="")
-  if(dir.exists(pasta)==FALSE){dir.create(pasta)}
+  folder = paste(root.dir,"/F-N", sep="")
+  if(dir.exists(folder)==FALSE){dir.create(folder)}
   
-  FolderSC = paste(pasta, "/", name_dir, sep="")
+  FolderSC = paste(folder, "/", name.dir, sep="")
   if(dir.exists(FolderSC)==FALSE){  dir.create(FolderSC)}
   
   FolderPlots = paste(FolderSC, "/Plots", sep="")
@@ -78,12 +78,14 @@ diretorios_2 <- function(name_dir){
   return(retorno) 
 }
 
-
-Friedman_Nemenyi_v2 <- function(path, name_dir){
+##############################################################################
+#
+##############################################################################
+Friedman.Nemenyi.v2 <- function(path, name.dir, root.dir, title){
   
   retorno = list()
   
-  pastas2 = diretorios_2(name_dir)
+  folders2 = directories.2(name.dir, root.dir)
   
   chisquare = c(0)
   ChiSquare = data.frame(chisquare)
@@ -94,47 +96,69 @@ Friedman_Nemenyi_v2 <- function(path, name_dir){
   degre = c(0)
   Degreess = data.frame(degre )
   
-  critical_difference = c(0)
-  CriticalDifference = data.frame(critical_difference)
+  critical.difference = c(0)
+  CriticalDifference = data.frame(critical.difference)
   
   rank = c(dir(path))
   names = c(RemoveCSV(rank))
   names2 = c(RemoveR(rank))
+  length(names)
+  length(names2)
+  
+  names = names[c(-4,-32)]
+  names2 = names2[c(-4,-32)]
   
   i = 1
   while(i<=length(names)){
     
     cat("\n", i, " - ", names2[i])
     
-    arquivo = paste(path, "/", rank[i], sep="")
-    Ranking = data.frame(read.csv(arquivo))
+    file = paste(path, "/", rank[i], sep="")
+    Ranking = data.frame(read.csv(file))
     ncol(Ranking)
+    
+    Ranking[is.na(Ranking)] <- 0
     
     # friedman
     fr = friedmanTest(Ranking)
-    nome = paste(pastas2$FolderTXTs, "/", names2[i], "-friedman.txt", sep="")
-    sink(nome)
+    name = paste(folders2$FolderTXTs, "/", names2[i],
+                 "-friedman.txt", sep="")
+    sink(name)
     print(fr)
     sink()
     
     # nemenyi
     ne = nemenyiTest(Ranking, alpha=0.05)
-    nome = paste(pastas2$FolderTXTs, "/", names2[i], "-nemenyi.txt", sep="")
-    sink(nome)
+    name = paste(folders2$FolderTXTs, "/", names2[i],
+                 "-nemenyi.txt", sep="")
+    sink(name)
     print(ne)
     sink()
     
-    setwd(pastas2$FolderCD)
-    pdf(paste(names2[i], "-CD.pdf", sep=""), width = 14, height = 6)
-    print(plotCD(Ranking, alpha=0.05, cex=1))
+    setwd(folders2$FolderCD)
+    pdf(paste(names2[i], ".pdf", sep=""), width = 11, height = 5)
+    print(plotCD(Ranking, alpha=0.05, cex=1, main = names2[i]))
     dev.off()
+    # main = paste(title, " ", names2[i], sep="")
     
-    #setwd(pastas$FolderDensity)
+    
+    # setwd(folders2$FolderCD)
+    # png(paste(names2[i], ".png", sep=""), 
+    #     width = 2560, height = 1440, res = 250)
+    # print(plotCD(Ranking, alpha=0.05, cex=1, main = names2[i]))
+    # print(mtext(side=3, line=0))
+    # paste(title, " ", names2[i], sep=""), col="red"
+    # print(text(x=20, y=20, col= "red", paste(title, " ", names2[i], sep="")))
+    # dev.off()
+    # main=paste(title, " ", names2[i], sep="")
+    
+    
+    #setwd(folders$FolderDensity)
     #pdf(paste(names[i], "-Density.pdf", sep=""), width = 10, height = 6)
     #print(plotDensities(Ranking2))
     #dev.off()
     
-    setwd(pastas2$FolderNPV)
+    setwd(folders2$FolderNPV)
     pdf(paste(names2[i], "-pValues.pdf", sep=""), width = 10, height = 6)
     print(plotPvalues(ne$diff.matrix, show.pvalue = TRUE, font.size = 2))
     dev.off()
@@ -153,22 +177,29 @@ Friedman_Nemenyi_v2 <- function(path, name_dir){
     CrDi = ne$statistic
     CriticalDifference = rbind(CriticalDifference, CrDi)
     
-    setwd(pastas2$FolderParam2)
-    write.csv2(ne$parameter, paste(names2[i], "-parameter.csv", sep=""))
+    setwd(folders2$FolderParam2)
+    write.csv2(ne$parameter, paste(names2[i], "-parameter.csv", sep=""),
+               row.names = FALSE)
     
-    setwd(pastas2$FolderDiff)
-    write.csv2(ne$diff.matrix, paste(names2[i], "-diff.csv", sep=""))
+    setwd(folders2$FolderDiff)
+    write.csv2(ne$diff.matrix, paste(names2[i], "-diff.csv", sep=""),
+               row.names = FALSE)
     
     i = i + 1
     gc()
     
   }
   
-  setwd(pastas2$FolderSC)
-  values = cbind(ChiSquare, Degreess, FPValue, CriticalDifference)
-  write.csv(values[-1,], "results.csv", row.names = FALSE)
+  ChiSquare = ChiSquare[-1,]
+  Degreess = Degreess[-1,]
+  FPValue = FPValue[-1,]
+  CriticalDifference = CriticalDifference[-1,]
+  
+  setwd(folders2$FolderSC)
+  values = data.frame(names2, ChiSquare, Degreess, FPValue, CriticalDifference)
+  write.csv(values, "results.csv", row.names = FALSE)
 
-  values = values[-1,]
+  #values = values[-1,]
   retorno$values = values
   return(retorno)  
 }
