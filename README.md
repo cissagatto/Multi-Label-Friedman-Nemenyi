@@ -76,7 +76,7 @@ for (file in files) {
 
 ### Documentation
 
-For more detailed documentation on each function, check out the `~/MultiLabelFriedmanNemenyi/docs`folder
+For more detailed documentation on each function, check out the `~/MultiLabelFriedmanNemenyi/docs`  folder
 
 
 ## 📚 **Contributing**
