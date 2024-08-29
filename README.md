@@ -86,9 +86,7 @@ We welcome contributions from the community! If you have suggestions, improvemen
 
 For any questions or support, please contact:
 - **Prof. Elaine Cecilia Gatto** (email@example.com)
-- **Prof. Ricardo Cerri** (email@example.com)
-- **Prof. Mauri Ferrandin** (email@example.com)
-
+  
 Thank you for using the Multi-Label Friedman-Nemenyi Analysis Toolkit. We hope this tool helps you in your multi-label classification tasks!
 
 ---
@@ -102,9 +100,6 @@ Thank you for using the Multi-Label Friedman-Nemenyi Analysis Toolkit. We hope t
 - This study was financed in part by the Conselho Nacional de Desenvolvimento Científico e Tecnológico - Brasil (CNPQ) - Process number 200371/2022-3.
 - The authors also thank the Brazilian research agencies FAPESP financial support.
 
-
-# Contact
-elainececiliagatto@gmail.com
 
 # Links
 
