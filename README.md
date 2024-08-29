@@ -48,7 +48,7 @@ Welcome to the **Multi-Label Friedman-Nemenyi Analysis Toolkit**! This powerful 
 
 2. **Process Your Data:**
 
-   Change the script `main.R` to process all CSV files in the `Data` directory. The script will automatically generate rankings and save the results in the `Results` directory.
+   The R MAIN script has a complete example of how to use the functions.
 
 
 ### Examples
