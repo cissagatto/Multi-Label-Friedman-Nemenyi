@@ -57,27 +57,6 @@ Welcome to the **Multi-Label Friedman-Nemenyi Analysis Toolkit**! This powerful 
   - **Parameters:**
     - `data`: A dataframe where rows represent different items to be ranked, and columns represent the ranking criteria.
   - **Returns:** A list of ranking dataframes with different tie-breaking strategies.
-
-- **`generates.rank.again(type, source_folder, destination_folder, file_names, names_list)`**
-  - **Description:** Reads CSV files, generates rankings based on specified criteria, and saves the results.
-  - **Parameters:**
-    - `type`: Column indices to be used for ranking.
-    - `source_folder`: Path to the folder containing input CSV files.
-    - `destination_folder`: Path to the folder where ranking results will be saved.
-    - `file_names`: Vector of file names to be processed.
-    - `names_list`: Vector of measure names corresponding to the files.
-  - **Returns:** A list of ranking results for each file.
-
-- **`ranking.for.all.measures(folder_names_csv, measure_names, my_methods, folders, results_mm)`**
-  - **Description:** Generates and saves rankings for all measures listed in the specified CSV files.
-  - **Parameters:**
-    - `folder_names_csv`: Vector of CSV file names.
-    - `measure_names`: Vector of measure names corresponding to the files.
-    - `my_methods`: Vector of method names to be used as column names.
-    - `folders`: List of folder paths for saving results.
-    - `results_mm`: List containing measure information.
-  - **Returns:** A list of ranking results for all measures.
-
 ### Examples
 
 Here are some examples of how to use the toolkit:
