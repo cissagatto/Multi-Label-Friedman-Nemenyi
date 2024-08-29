@@ -50,13 +50,7 @@ Welcome to the **Multi-Label Friedman-Nemenyi Analysis Toolkit**! This powerful 
 
    Change the script `main.R` to process all CSV files in the `Data` directory. The script will automatically generate rankings and save the results in the `Results` directory.
 
-### Functions Overview
 
-- **`generate.ranking(data)`**
-  - **Description:** Computes rankings for each row in a dataset using various tie-breaking methods.
-  - **Parameters:**
-    - `data`: A dataframe where rows represent different items to be ranked, and columns represent the ranking criteria.
-  - **Returns:** A list of ranking dataframes with different tie-breaking strategies.
 ### Examples
 
 Here are some examples of how to use the toolkit:
