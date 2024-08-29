@@ -48,7 +48,7 @@ Welcome to the **Multi-Label Friedman-Nemenyi Analysis Toolkit**! This powerful 
 
 2. **Process Your Data:**
 
-   The R MAIN script has a complete example of how to use the functions.
+   The `run.R` script has a complete example of how to use the functions.
 
 
 ### Examples
