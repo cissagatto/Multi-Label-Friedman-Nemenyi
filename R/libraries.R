@@ -24,18 +24,31 @@
 ##############################################################################
 # WORSKSPACE
 ##############################################################################
-FolderRoot = "~/Multi-Label-Friedman-Nemenyi"
-FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
+FolderRoot = "~/MultiLabelFriedmanNemenyi"
+FolderScripts = "~/MultiLabelFriedmanNemenyi/R"
 
 
 
-if (!require("devtools")) {
-  install.packages("devtools")
+#' Installs necessary packages
+#'
+#' This function checks if the `devtools` package is installed and installs it if not. It then installs the `scmamp` package from GitHub.
+#'
+#' @return No value is returned.
+#' @export
+install_packages <- function() {
+  if (!require("devtools")) {
+    install.packages("devtools")
+  }
+  devtools::install_github("b0rxa/scmamp")
 }
-devtools::install_github("b0rxa/scmamp")
 
 
 library(stringr)
 library(scmamp)
 library(dplyr)
 
+
+
+##############################################################################
+# 
+##############################################################################

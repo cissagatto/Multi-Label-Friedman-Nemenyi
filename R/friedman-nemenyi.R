@@ -24,21 +24,53 @@
 ##############################################################################
 # WORSKSPACE
 ##############################################################################
-FolderRoot = "~/Multi-Label-Friedman-Nemenyi"
-FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
+FolderRoot = "~/MultiLabelFriedmanNemenyi"
+FolderScripts = "~/MultiLabelFriedmanNemenyi/R"
 
 
-
-
-##############################################################################
-# Function: friedman.nemenyi
-# Description: Perform Friedman test followed by Nemenyi post-hoc test.
-# Parameters:
-#   data - A data frame containing the results of multiple methods.
-#   save - A string specifying the base name for output files.
-# Returns:
-#   A data frame with the test statistics and results.
-##############################################################################
+#' Perform Friedman Test Followed by Nemenyi Post-Hoc Test
+#'
+#' This function performs the Friedman test on the provided data to assess
+#' if there are significant differences among multiple methods. If the
+#' Friedman test indicates significant differences, the function then performs
+#' the Nemenyi post-hoc test to determine which methods are significantly different.
+#' The results are saved as CSV and PDF files, including the difference matrix,
+#' Critical Difference (CD) plot, and p-values plot.
+#'
+#' @param data A data frame containing the results of multiple methods. Each
+#'   row should represent a different method, and columns should represent the
+#'   observations or measurements.
+#' @param save A string specifying the base name for output files. The function
+#'   will use this base name to save the difference matrix, Critical Difference
+#'   plot, and p-values plot.
+#'
+#' @return A data frame with the following columns:
+#'   \itemize{
+#'     \item \code{f.ChiSquare}: The Chi-Square statistic from the Friedman test.
+#'     \item \code{f.pValue}: The p-value from the Friedman test.
+#'     \item \code{f.Method}: The method used for the Friedman test.
+#'     \item \code{n.CriticalDifference}: The Critical Difference from the Nemenyi test.
+#'     \item \code{result}: A string indicating whether the methods are significantly different.
+#'   }
+#'
+#' @details
+#' The function saves three outputs:
+#' \itemize{
+#'   \item A CSV file with the name \code{paste(save, "-diff-matrix.txt", sep="")} containing
+#'     the difference matrix from the Nemenyi post-hoc test.
+#'   \item A PDF file with the name \code{paste(save, ".pdf", sep="")} containing the Critical
+#'     Difference (CD) plot.
+#'   \item A PDF file with the name \code{paste(save, "-pValues.pdf", sep="")} containing
+#'     the p-values plot.
+#' }
+#'
+#' @examples
+#' # Example usage
+#' # Assume 'my_data' is a data frame with results for different methods
+#' # and 'base_name' is the base name for output files
+#' result <- friedman.nemenyi(my_data, "base_name")
+#'
+#' @export
 friedman.nemenyi <- function(data, save) {
   
   # Perform Friedman test
@@ -80,7 +112,6 @@ friedman.nemenyi <- function(data, save) {
   # Return the results data frame
   return(all)
 }
-
 
 
 ##############################################################################

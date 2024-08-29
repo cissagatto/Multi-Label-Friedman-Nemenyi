@@ -24,25 +24,38 @@
 ##############################################################################
 # WORSKSPACE
 ##############################################################################
-FolderRoot = "~/Multi-Label-Friedman-Nemenyi"
-FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
+FolderRoot = "~/MultiLabelFriedmanNemenyi"
+FolderScripts = "~/MultiLabelFriedmanNemenyi/R"
 
 
-
-
-####################################################################
-# Function: measures
-# Description: Creates a list containing names of evaluation metrics,
-#              their types, and the total count of metrics.
-# Returns:
-#   A list with three components:
-#     - names: A character vector of metric names.
-#     - total: The total number of metrics.
-#     - type: An integer vector representing the type of each metric.
-####################################################################
-
-
-# Function to create a data frame of metrics
+#' Create a List of Evaluation Metrics
+#'
+#' This function creates a data frame containing names of evaluation metrics,
+#' their types, and the total count of metrics. Each metric is categorized by
+#' its type, which is represented as an integer.
+#'
+#' @return A data frame with the following components:
+#'   \itemize{
+#'     \item \code{names}: A character vector of metric names.
+#'     \item \code{type}: An integer vector representing the type of each metric.
+#'   }
+#'   The total number of metrics is equal to the length of the \code{names} vector.
+#'
+#' @details
+#' The \code{type} vector categorizes metrics as follows:
+#' \itemize{
+#'   \item \code{1}: Metrics that are generally used for performance evaluation.
+#'   \item \code{0}: Metrics that are less commonly used or have different evaluation criteria.
+#' }
+#' 
+#' @examples
+#' # Create the data frame of metrics
+#' metric_df <- measures()
+#' 
+#' # Print the data frame
+#' print(metric_df)
+#'
+#' @export
 measures <- function() {
   
   # Define the metric names and their types

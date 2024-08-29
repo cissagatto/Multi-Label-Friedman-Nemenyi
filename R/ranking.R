@@ -23,8 +23,8 @@
 ##############################################################################
 # WORSKSPACE
 ##############################################################################
-FolderRoot = "~/Multi-Label-Friedman-Nemenyi"
-FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
+FolderRoot = "~/MultiLabelFriedmanNemenyi"
+FolderScripts = "~/MultiLabelFriedmanNemenyi/R"
 
 
 
@@ -37,35 +37,47 @@ source("utils.R")
 
 
 
-##############################################################################
-#
-# Function to generate various types of rankings for each row in a dataset.
-#
-# This function computes rankings for each row of a dataset using different 
-# tie-breaking methods. It generates rankings in both the original and reverse 
-# order (where higher ranks become lower) and returns the results in a list.
-#
-# Parameters:
-# - data: A data frame where each row represents a set of values to be ranked.
-#   The columns of the data frame are considered as the different items to rank.
-#
-# Returns:
-# - result: A list containing multiple data frames with rankings calculated 
-#   using different tie-breaking methods. The list includes:
-#     - rank.first.0: Rankings with "first" tie-breaking method, in original order
-#     - rank.last.0: Rankings with "last" tie-breaking method, in original order
-#     - rank.average.0: Rankings with "average" tie-breaking method, in original order
-#     - rank.random.0: Rankings with "random" tie-breaking method, in original order
-#     - rank.min.0: Rankings with "min" tie-breaking method, in original order
-#     - rank.max.0: Rankings with "max" tie-breaking method, in original order
-#     - rank.first.1: Rankings with "first" tie-breaking method, in reverse order
-#     - rank.last.1: Rankings with "last" tie-breaking method, in reverse order
-#     - rank.average.1: Rankings with "average" tie-breaking method, in reverse order
-#     - rank.random.1: Rankings with "random" tie-breaking method, in reverse order
-#     - rank.min.1: Rankings with "min" tie-breaking method, in reverse order
-#     - rank.max.1: Rankings with "max" tie-breaking method, in reverse order
-#
-##############################################################################
+
+#' Generate Various Types of Rankings for Each Row in a Dataset
+#'
+#' This function computes rankings for each row of a dataset using different 
+#' tie-breaking methods. It generates rankings in both the original and reverse 
+#' order (where higher ranks become lower) and returns the results in a list.
+#'
+#' @param data A data frame where each row represents a set of values to be ranked.
+#'   The columns of the data frame are considered as the different items to rank.
+#'
+#' @return A list containing multiple data frames with rankings calculated 
+#'   using different tie-breaking methods. The list includes:
+#'   \describe{
+#'     \item{rank.first.0}{Rankings with "first" tie-breaking method, in original order.}
+#'     \item{rank.last.0}{Rankings with "last" tie-breaking method, in original order.}
+#'     \item{rank.average.0}{Rankings with "average" tie-breaking method, in original order.}
+#'     \item{rank.random.0}{Rankings with "random" tie-breaking method, in original order.}
+#'     \item{rank.min.0}{Rankings with "min" tie-breaking method, in original order.}
+#'     \item{rank.max.0}{Rankings with "max" tie-breaking method, in original order.}
+#'     \item{rank.first.1}{Rankings with "first" tie-breaking method, in reverse order.}
+#'     \item{rank.last.1}{Rankings with "last" tie-breaking method, in reverse order.}
+#'     \item{rank.average.1}{Rankings with "average" tie-breaking method, in reverse order.}
+#'     \item{rank.random.1}{Rankings with "random" tie-breaking method, in reverse order.}
+#'     \item{rank.min.1}{Rankings with "min" tie-breaking method, in reverse order.}
+#'     \item{rank.max.1}{Rankings with "max" tie-breaking method, in reverse order.}
+#'   }
+#'
+#' @examples
+#' # Example data frame
+#' df <- data.frame(A = c(3, 1, 4), B = c(2, 5, 6), C = c(7, 8, 9))
+#' 
+#' # Generate rankings
+#' rankings <- generate.ranking(df)
+#' 
+#' # View the rankings in original order
+#' print(rankings$rank.first.0)
+#' 
+#' # View the rankings in reverse order
+#' print(rankings$rank.first.1)
+#'
+#' @export
 generate.ranking <- function(data) {
   
   # Initialize list to store ranking results
@@ -170,32 +182,45 @@ generate.ranking <- function(data) {
 
 
 
-
-##############################################################################
-#
-# Function to generate rankings for CSV files and save the results.
-#
-# This function processes a list of CSV files, generates rankings based on
-# the provided columns, and saves the results in a specified destination folder.
-# It handles different types of ranking based on the provided measure values.
-#
-# Parameters:
-# - type: A vector of column indices or names to select from the CSV files
-#   for ranking. This determines which columns are included in the ranking.
-# - source_folder: The folder path where the input CSV files are located.
-# - destination_folder: The folder path where the ranking results will be saved.
-#   Default is set to 'Folders', which should be defined in the user's 
-# environment.
-# - file_names: A vector of file names (without path) for the CSV files to be 
-#   processed.
-# - names_list: A vector of names corresponding to the measures for each 
-# CSV file.
-#
-# Returns:
-# - result: A list containing ranking results for each file. The list has an 
-#   entry for each file, with the rankings stored as data frames.
-#
-##############################################################################
+#' Generate Rankings for CSV Files and Save Results
+#'
+#' This function processes a list of CSV files, generates rankings based on
+#' the provided columns, and saves the results in a specified destination folder.
+#' It handles different types of ranking based on the provided measure values.
+#'
+#' @param type A vector of column indices or names to select from the CSV files
+#'   for ranking. This determines which columns are included in the ranking.
+#' @param source_folder The folder path where the input CSV files are located.
+#' @param destination_folder The folder path where the ranking results will be saved.
+#'   Default is set to 'Folders', which should be defined in the user's 
+#'   environment.
+#' @param file_names A vector of file names (without path) for the CSV files to be 
+#'   processed.
+#' @param names_list A vector of names corresponding to the measures for each 
+#'   CSV file.
+#'
+#' @return A list containing ranking results for each file. The list has an 
+#'   entry for each file, with the rankings stored as data frames.
+#'
+#' @details
+#' The function reads CSV files from the `source_folder`, processes each file by
+#' generating rankings based on the specified columns (`type`), and saves the 
+#' rankings to the `destination_folder`. The measure values from `names_list` determine
+#' which ranking is saved. If the measure value is 1, it saves the rankings in 
+#' reverse order; otherwise, it saves them in the original order.
+#'
+#' @examples
+#' # Example usage
+#' type <- c("Column1", "Column2")
+#' source_folder <- "path/to/source"
+#' destination_folder <- "path/to/destination"
+#' file_names <- c("file1.csv", "file2.csv")
+#' names_list <- c("measure1", "measure2")
+#' 
+#' # Generate and save rankings
+#' results <- generates.rank.again(type, source_folder, destination_folder, file_names, names_list)
+#'
+#' @export
 generates.rank.again <- function(type, 
                                  source_folder, 
                                  destination_folder = Folders, 
@@ -269,38 +294,58 @@ generates.rank.again <- function(type,
 
 
 
-
-##############################################################################
-#
-# Function to generate rankings for all measures in a set of CSV files.
-#
-# This function processes a list of CSV files, computes rankings based on
-# various measures, and saves the results in specified directories. It
-# handles different tie-breaking methods and saves both individual and 
-# aggregated ranking results. The function also generates mean rankings 
-# for both "0" and "1" categories, and stores these in separate files.
-#
-# Parameters:
-# - folder_names_csv: A vector of file names (without path) for the CSV files
-#   to be processed.
-# - measure_names: A vector of names corresponding to the measures to be 
-#   used for filtering rankings.
-# - my_methods: A vector of method names that will be used as column names 
-#   for the DataFrame created from the CSV files.
-# - folders: A list containing folder paths for different stages of saving 
-#   results. This should include:
-#   - FolderCSVs: Path where the input CSV files are located.
-#   - FolderRankings: Path where individual ranking results should be saved.
-#   - FolderAllRankings: Path where all ranking averages should be saved.
-#   - FolderMediaRankings: Path where mean ranking results should be saved.
-# - results_mm: A list containing results with measures data, which includes
-#   information needed to determine which ranking method to apply.
-#
-# Returns:
-# - result: A list that currently is empty but can be extended to include
-#   additional results or status information if needed.
-#
-##############################################################################
+#' Generate Rankings for All Measures in a Set of CSV Files
+#'
+#' This function processes a list of CSV files, computes rankings based on
+#' various measures, and saves the results in specified directories. It handles
+#' different tie-breaking methods and saves both individual and aggregated
+#' ranking results. The function also generates mean rankings for both "0"
+#' and "1" categories, and stores these in separate files.
+#'
+#' @param folder_names_csv A vector of file names (without path) for the CSV files
+#'   to be processed.
+#' @param measure_names A vector of names corresponding to the measures to be 
+#'   used for filtering rankings.
+#' @param my_methods A vector of method names that will be used as column names 
+#'   for the DataFrame created from the CSV files.
+#' @param folders A list containing folder paths for different stages of saving 
+#'   results. This should include:
+#'   \itemize{
+#'     \item \code{FolderCSVs}: Path where the input CSV files are located.
+#'     \item \code{FolderRankings}: Path where individual ranking results should be saved.
+#'     \item \code{FolderAllRankings}: Path where all ranking averages should be saved.
+#'     \item \code{FolderMediaRankings}: Path where mean ranking results should be saved.
+#'   }
+#' @param results_mm A list containing results with measures data, which includes
+#'   information needed to determine which ranking method to apply.
+#'
+#' @return A list that is currently empty but can be extended to include
+#'   additional results or status information if needed.
+#'
+#' @details
+#' The function processes each CSV file listed in \code{folder_names_csv}, 
+#' applies the specified measures to generate rankings, and saves the results
+#' to the directories specified in \code{folders}. Rankings are saved with 
+#' prefixes "0-" and "1-" to indicate the categories. Mean rankings for both 
+#' categories are also computed and saved.
+#'
+#' @examples
+#' # Example usage
+#' folder_names_csv <- c("file1.csv", "file2.csv")
+#' measure_names <- c("measure1", "measure2")
+#' my_methods <- c("method1", "method2")
+#' folders <- list(
+#'   FolderCSVs = "path/to/csvs",
+#'   FolderRankings = "path/to/rankings",
+#'   FolderAllRankings = "path/to/all_rankings",
+#'   FolderMediaRankings = "path/to/media_rankings"
+#' )
+#' results_mm <- list(measures = data.frame(names = c("measure1", "measure2"), values = c(0, 1)))
+#' 
+#' # Generate and save rankings
+#' results <- ranking.for.all.measures(folder_names_csv, measure_names, my_methods, folders, results_mm)
+#'
+#' @export
 ranking.for.all.measures <- function(folder_names_csv, measure_names,
                                      my_methods, folders, results_mm) {
   
@@ -382,6 +427,7 @@ ranking.for.all.measures <- function(folder_names_csv, measure_names,
   # Return the result list (currently empty, but can be extended)
   return(result)
 }
+
 
 
 ##############################################################################

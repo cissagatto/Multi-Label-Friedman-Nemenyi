@@ -24,14 +24,14 @@
 
 
 
-##############################################################################
-# WORKSPACE
-##############################################################################
-FolderRoot = "~/Multi-Label-Friedman-Nemenyi"
-FolderScripts = "~/Multi-Label-Friedman-Nemenyi/R"
-FolderData = "~/Multi-Label-Friedman-Nemenyi/Data"
-FolderResults = "~/Multi-Label-Friedman-Nemenyi/Results"
 
+##############################################################################
+# WORSKSPACE
+##############################################################################
+FolderRoot = "~/MultiLabelFriedmanNemenyi"
+FolderScripts = "~/MultiLabelFriedmanNemenyi/R"
+FolderData = "~/MultiLabelFriedmanNemenyi/Data"
+FolderResults = "~/MultiLabelFriedmanNemenyi/Results"
 
 
 ##############################################################################
@@ -43,11 +43,12 @@ source("utils.R")
 source("ranking.R")
 source("friedman-nemenyi.R")
 
+setwd(FolderRoot)
 
 ##############################################################################
 # ONE RESULT
 ##############################################################################
-clp = data.frame(read.csv("~/Multi-Label-Friedman-Nemenyi/Data/clp.csv"))
+clp = data.frame(read.csv("~/MultiLabelFriedmanNemenyi/Data/clp.csv"))
 clp = clp[,-1]
 
 df_res.mes <- measures()

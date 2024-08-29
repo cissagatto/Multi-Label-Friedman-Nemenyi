@@ -1,0 +1,12 @@
+Package: MultiLabelFriedmanNemenyi
+Type: Package
+Title: A package for multi-label Friedman-Nemenyi analysis
+Version: 0.1.0
+Author: Elaine Cecília Gatto
+Description: This package provides tools for analyzing multi-label classification data
+    using Friedman and Nemenyi tests, including functions for ranking and generating
+    results.
+License: GPL-3
+Maintainer: Prof. Elaine Cecilia Gatto <elainececiliagattto@gmail.com>
+Encoding: UTF-8
+RoxygenNote: 7.3.2

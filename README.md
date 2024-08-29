@@ -76,7 +76,8 @@ for (file in files) {
 
 ### Documentation
 
-For more detailed documentation on each function, check out the comments in the R scripts. Each function is thoroughly documented to help you understand its purpose and parameters.
+For more detailed documentation on each function, check out the `~/MultiLabelFriedmanNemenyi/docs`folder
+
 
 ## 📚 **Contributing**
 
@@ -85,7 +86,7 @@ We welcome contributions from the community! If you have suggestions, improvemen
 ## 📧 **Contact**
 
 For any questions or support, please contact:
-- **Prof. Elaine Cecilia Gatto** (email@example.com)
+- **Prof. Elaine Cecilia Gatto** (elainececiliagatto@gmail.com)
   
 Thank you for using the Multi-Label Friedman-Nemenyi Analysis Toolkit. We hope this tool helps you in your multi-label classification tasks!
 
