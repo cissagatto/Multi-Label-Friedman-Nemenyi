@@ -18,7 +18,7 @@ Welcome to the **Multi-Label Friedman-Nemenyi Analysis Toolkit**! This powerful 
   year = {2024},
   note = {R package version 0.1.0 Licensed under CC BY-NC-SA 4.0},
   doi = {10.13140/RG.2.2.17865.35687},
-  url = {https://github.com/cissagatto/MultiLabelFriedmanNemenyi},
+  url = {https://github.com/cissagatto/MultiLabelFriedmanNemenyi}
 }
 ```
 
