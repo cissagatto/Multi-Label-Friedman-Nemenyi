@@ -9,7 +9,14 @@ Welcome to the **Multi-Label Friedman-Nemenyi Analysis Toolkit**! This powerful 
 - **Comprehensive Statistical Analysis:** Utilize the Friedman-Nemenyi test to rigorously evaluate and compare multiple methods or classifiers.
 - **Customizable Outputs:** Save results to organized folders with intuitive naming conventions for easy reference and further analysis.
 
+## How to Cite
 
+@Manual{,
+  title = {MultiLabelFriedmanNemenyi: A package for multi-label Friedman-Nemenyi analysis},
+  author = {Elaine Cecília Gatto},
+  year = {2024},
+  note = {R package version 0.1.0},
+}
 
 ## 📥 **Getting Started**
 
