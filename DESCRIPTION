@@ -6,7 +6,9 @@ Author: Elaine Cecília Gatto
 Description: This package provides tools for analyzing multi-label classification data
     using Friedman and Nemenyi tests, including functions for ranking and generating
     results.
-License: GPL-3
+Depends: R (>= 4.0)
+Imports: dplyr, ggplot2
+License: CC BY-NC-SA 4.0
 Maintainer: Prof. Elaine Cecilia Gatto <elainececiliagattto@gmail.com>
 Encoding: UTF-8
 RoxygenNote: 7.3.2

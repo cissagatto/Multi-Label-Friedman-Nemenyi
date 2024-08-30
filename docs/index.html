@@ -90,63 +90,88 @@
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h3>
-<ol style="list-style-type: decimal">
-<li>
-<p><strong>Clone the Repository:</strong></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/yourusername/multi-label-friedman-nemenyi.git</span></code></pre></div>
-</li>
-<li>
-<p><strong>Set Up Your Environment:</strong></p>
-<p>Open the R console or RStudio and navigate to the directory containing the scripts:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="st">"~/path-to-cloned-repo/multi-label-friedman-nemenyi/R"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"libraries.R"</span><span class="op">)</span>  <span class="co"># Load all required libraries</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"utils.R"</span><span class="op">)</span>      <span class="co"># Load utility functions</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"ranking.R"</span><span class="op">)</span>    <span class="co"># Load ranking functions</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"friedman-nemenyi.R"</span><span class="op">)</span>  <span class="co"># Load Friedman-Nemenyi functions</span></span></code></pre></div>
-</li>
-<li>
-<p><strong>Prepare Your Data:</strong></p>
-<p>Place your CSV files into the <code>Data</code> directory. Ensure that each CSV file corresponds to a different measure or dataset.</p>
-</li>
-</ol>
-</div>
-<div class="section level3">
-<h3 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
-</h3>
-<ol style="list-style-type: decimal">
-<li>
-<p><strong>Set Up Your Working Directories:</strong></p>
-<p>Configure your working directories by setting the <code>FolderRoot</code>, <code>FolderScripts</code>, <code>FolderData</code>, and <code>FolderResults</code> paths in the <code>main.R</code> script.</p>
-</li>
-<li>
-<p><strong>Process Your Data:</strong></p>
-<p>The <code>run.R</code> script has a complete example of how to use the functions.</p>
-</li>
-</ol>
+<p>Install the library:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">MultiLabelFriedmanNemenyi</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h3>
 <p>Here are some examples of how to use the toolkit:</p>
 <p><strong>Processing a Single File:</strong></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"path/to/your/file.csv"</span><span class="op">)</span></span>
-<span><span class="va">ranking</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/generate.ranking.html">generate.ranking</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="va">FolderRoot</span><span class="op">)</span></span>
+<span><span class="va">clp</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"~/MultiLabelFriedmanNemenyi/Data/clp.csv"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">clp</span> <span class="op">=</span> <span class="va">clp</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">df_res.mes</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fn.measures.html">fn.measures</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">filtered_res.mes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">df_res.mes</span>, <span class="va">names</span> <span class="op">==</span> <span class="st">"clp"</span><span class="op">)</span></span>
+<span><span class="va">save</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">FolderResults</span>, <span class="st">"/clp"</span>, sep<span class="op">=</span><span class="st">""</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="va">filtered_res.mes</span><span class="op">$</span><span class="va">type</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="co"># if the measure is type 1, isto é, o melhore valor é um</span></span>
+<span>    <span class="va">res</span> <span class="op">=</span> <span class="fu"><a href="reference/friedman.nemenyi.html">friedman.nemenyi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">clp</span>, save <span class="op">=</span> <span class="va">save</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="co"># if the measure is type 0, isto é, o melhor valor é zero</span></span>
+<span>  </span>
+<span>  <span class="va">ranking</span> <span class="op">=</span> <span class="fu"><a href="reference/generate.ranking.html">generate.ranking</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">clp</span><span class="op">)</span></span>
+<span>  <span class="va">res.data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">ranking</span><span class="op">$</span><span class="va">rank.average.1</span><span class="op">)</span> </span>
+<span>  <span class="va">res.fn</span> <span class="op">=</span> <span class="fu"><a href="reference/friedman.nemenyi.html">friedman.nemenyi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">res.data</span>, save <span class="op">=</span> <span class="va">save</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p><strong>Processing Multiple Files:</strong></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="va">FolderData</span><span class="op">)</span></span>
-<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"\\.csv$"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">file</span> <span class="kw">in</span> <span class="va">files</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span></span>
-<span>  <span class="va">ranking</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/generate.ranking.html">generate.ranking</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span>  <span class="co"># Additional processing...</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="va">FolderData</span><span class="op">)</span></span>
+<span><span class="va">current_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"\\.csv$"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># List all CSV files</span></span>
+<span><span class="va">full_paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">files</span>, <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Process each CSV file</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">file_path</span> <span class="kw">in</span> <span class="va">full_paths</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Read the CSV file</span></span>
+<span>  <span class="va">data_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span>  <span class="co"># Extract file name</span></span>
+<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Remove the first column</span></span>
+<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="co"># Generate rankings</span></span>
+<span>  <span class="va">ranking</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/generate.ranking.html">generate.ranking</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Get measure name from the file name (assuming the file name indicates the measure)</span></span>
+<span>  <span class="va">measure_name</span> <span class="op">&lt;-</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/fileutils.html" class="external-link">file_path_sans_ext</a></span><span class="op">(</span><span class="va">data_name</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Load measures data</span></span>
+<span>  <span class="va">df_res.mes</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fn.measures.html">fn.measures</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">filtered_res.mes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">df_res.mes</span>, <span class="va">names</span> <span class="op">==</span> <span class="va">measure_name</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Define the path to save results</span></span>
+<span>  <span class="va">save_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">FolderResults</span>, <span class="st">"/"</span>, <span class="va">measure_name</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">filtered_res.mes</span><span class="op">$</span><span class="va">type</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># If the measure is type 1, i.e., the best value is one</span></span>
+<span>    <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/friedman.nemenyi.html">friedman.nemenyi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, save <span class="op">=</span> <span class="va">save_path</span><span class="op">)</span></span>
+<span>    </span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="co"># If the measure is type 0, i.e., the best value is zero</span></span>
+<span>    <span class="va">res_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">ranking</span><span class="op">$</span><span class="va">rank.average.1</span><span class="op">)</span> </span>
+<span>    <span class="va">res_fn</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/friedman.nemenyi.html">friedman.nemenyi</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">res_data</span>, save <span class="op">=</span> <span class="va">save_path</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nProcessed file:"</span>, <span class="va">data_name</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h3>
-<p>For more detailed documentation on each function, check out the <code>~/MultiLabelFriedmanNemenyi/docs</code>folder</p>
+<p>For more detailed documentation on each function, check out the <code>~/MultiLabelFriedmanNemenyi/docs</code> folder</p>
+</div>
+<div class="section level3">
+<h3 id="r-example">R Example<a class="anchor" aria-label="anchor" href="#r-example"></a>
+</h3>
+<p>You can fin a complete script R example in <code>~/MultiLabelFriedmanNemenyi/example</code> folder</p>
 </div>
 </div>
 <div class="section level2">
@@ -161,8 +186,6 @@
 </h2>
 <p>For any questions or support, please contact: - <strong>Prof. Elaine Cecilia Gatto</strong> (<a href="mailto:elainececiliagatto@gmail.com" class="email">elainececiliagatto@gmail.com</a>)</p>
 <p>Thank you for using the Multi-Label Friedman-Nemenyi Analysis Toolkit. We hope this tool helps you in your multi-label classification tasks!</p>
-<hr>
-<p><strong>Happy Analyzing!</strong> 🎉</p>
 </div>
 <div class="section level2">
 <h2 id="acknowledgment">Acknowledgment<a class="anchor" aria-label="anchor" href="#acknowledgment"></a>
@@ -179,6 +202,8 @@
 </h1>
 <div class="line-block">
 <a href="https://sites.google.com/view/professor-cissa-gatto" class="external-link">Site</a> | <a href="http://ppgcc.dc.ufscar.br/pt-br" class="external-link">Post-Graduate Program in Computer Science</a> | <a href="https://site.dc.ufscar.br/" class="external-link">Computer Department</a> | <a href="http://www.biomal.ufscar.br/" class="external-link">Biomal</a> | <a href="https://www.gov.br/cnpq/pt-br" class="external-link">CNPQ</a> | <a href="https://kulak.kuleuven.be/" class="external-link">Ku Leuven</a> | <a href="https://www.embarcados.com.br/author/cissa/" class="external-link">Embarcados</a> | <a href="https://prensa.li/@cissa.gatto/" class="external-link">Read Prensa</a> | <a href="https://www.linkedin.com/company/27241216" class="external-link">Linkedin Company</a> | <a href="https://www.linkedin.com/in/elainececiliagatto/" class="external-link">Linkedin Profile</a> | <a href="https://www.instagram.com/cissagatto" class="external-link">Instagram</a> | <a href="https://www.facebook.com/cissagatto" class="external-link">Facebook</a> | <a href="https://twitter.com/cissagatto" class="external-link">Twitter</a> | <a href="https://www.twitch.tv/cissagatto" class="external-link">Twitch</a> | <a href="https://www.youtube.com/CissaGatto" class="external-link">Youtube</a> |</div>
+<hr>
+<p>Start making good decisions with the Multi-label Friedman Nemenyi Tool today! 🚀 🎉</p>
 </div>
 
   </div>
@@ -187,7 +212,7 @@
     <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
+<li><a href="https://creativecommons.org/licenses/by-nc-sa/4.0" class="external-link">CC BY-NC-SA 4.0</a></li>
 </ul>
 </div>
 

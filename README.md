@@ -9,46 +9,25 @@ Welcome to the **Multi-Label Friedman-Nemenyi Analysis Toolkit**! This powerful 
 - **Comprehensive Statistical Analysis:** Utilize the Friedman-Nemenyi test to rigorously evaluate and compare multiple methods or classifiers.
 - **Customizable Outputs:** Save results to organized folders with intuitive naming conventions for easy reference and further analysis.
 
+
+
 ## 📥 **Getting Started**
+
 
 ### Prerequisites
 
 - R (version 4.0 or higher)
 - Necessary R packages: `dplyr`, `tools`, `ggplot2`, and any other dependencies listed in `libraries.R`.
 
+
+
 ### Installation
 
-1. **Clone the Repository:**
-
-   ```sh
-   git clone https://github.com/yourusername/multi-label-friedman-nemenyi.git
-   ```
-
-2. **Set Up Your Environment:**
-
-   Open the R console or RStudio and navigate to the directory containing the scripts:
+Install the library:
 
    ```r
-   setwd("~/path-to-cloned-repo/multi-label-friedman-nemenyi/R")
-   source("libraries.R")  # Load all required libraries
-   source("utils.R")      # Load utility functions
-   source("ranking.R")    # Load ranking functions
-   source("friedman-nemenyi.R")  # Load Friedman-Nemenyi functions
+     library(MultiLabelFriedmanNemenyi)
    ```
-
-3. **Prepare Your Data:**
-
-   Place your CSV files into the `Data` directory. Ensure that each CSV file corresponds to a different measure or dataset.
-
-### Usage
-
-1. **Set Up Your Working Directories:**
-
-   Configure your working directories by setting the `FolderRoot`, `FolderScripts`, `FolderData`, and `FolderResults` paths in the `main.R` script.
-
-2. **Process Your Data:**
-
-   The `run.R` script has a complete example of how to use the functions.
 
 
 ### Examples
@@ -58,25 +37,83 @@ Here are some examples of how to use the toolkit:
 **Processing a Single File:**
 
 ```r
-data <- read.csv("path/to/your/file.csv")
-ranking <- generate.ranking(data)
+
+setwd(FolderRoot)
+clp = data.frame(read.csv("~/MultiLabelFriedmanNemenyi/Data/clp.csv"))
+clp = clp[,-1]
+
+df_res.mes <- fn.measures()
+filtered_res.mes <- filter(df_res.mes, names == "clp")
+save = paste(FolderResults, "/clp", sep="")
+
+if(filtered_res.mes$type==1){
+  # if the measure is type 1, isto é, o melhore valor é um
+    res = friedman.nemenyi(data = clp, save = save)
+  
+} else {
+  # if the measure is type 0, isto é, o melhor valor é zero
+  
+  ranking = generate.ranking(data = clp)
+  res.data = data.frame(ranking$rank.average.1) 
+  res.fn = friedman.nemenyi(data = res.data, save = save)
+}
+
 ```
 
 **Processing Multiple Files:**
 
 ```r
+
 setwd(FolderData)
-files <- list.files(pattern = "\\.csv$", full.names = TRUE)
-for (file in files) {
-  data <- read.csv(file)
-  ranking <- generate.ranking(data)
-  # Additional processing...
+current_dir <- getwd()
+files <- list.files(pattern = "\\.csv$", full.names = TRUE)  # List all CSV files
+full_paths <- sapply(files, function(file) normalizePath(file))
+
+# Process each CSV file
+for (file_path in full_paths) {
+  # Read the CSV file
+  data_name <- basename(file_path)  # Extract file name
+  data <- data.frame(read.csv(file_path))
+  
+  # Remove the first column
+  data <- data[, -1]
+  
+  # Generate rankings
+  ranking <- generate.ranking(data = data)
+  
+  # Get measure name from the file name (assuming the file name indicates the measure)
+  measure_name <- tools::file_path_sans_ext(data_name)
+  
+  # Load measures data
+  df_res.mes <- fn.measures()
+  filtered_res.mes <- filter(df_res.mes, names == measure_name)
+  
+  # Define the path to save results
+  save_path <- paste(FolderResults, "/", measure_name, sep = "")
+  
+  if (filtered_res.mes$type == 1) {
+    # If the measure is type 1, i.e., the best value is one
+    res <- friedman.nemenyi(data = data, save = save_path)
+    
+  } else {
+    # If the measure is type 0, i.e., the best value is zero
+    res_data <- data.frame(ranking$rank.average.1) 
+    res_fn <- friedman.nemenyi(data = res_data, save = save_path)
+  }
+  
+  cat("\nProcessed file:", data_name)
 }
+
 ```
 
 ### Documentation
 
-For more detailed documentation on each function, check out the `~/MultiLabelFriedmanNemenyi/docs`  folder
+For more detailed documentation on each function, check out the `~/MultiLabelFriedmanNemenyi/docs` folder
+
+
+### R Example
+
+You can fin a complete script R example in `~/MultiLabelFriedmanNemenyi/example` folder
 
 
 ## 📚 **Contributing**
@@ -90,10 +127,6 @@ For any questions or support, please contact:
   
 Thank you for using the Multi-Label Friedman-Nemenyi Analysis Toolkit. We hope this tool helps you in your multi-label classification tasks!
 
----
-
-**Happy Analyzing!** 🎉
-
 
 
 ## Acknowledgment
@@ -105,3 +138,8 @@ Thank you for using the Multi-Label Friedman-Nemenyi Analysis Toolkit. We hope t
 # Links
 
 | [Site](https://sites.google.com/view/professor-cissa-gatto) | [Post-Graduate Program in Computer Science](http://ppgcc.dc.ufscar.br/pt-br) | [Computer Department](https://site.dc.ufscar.br/) |  [Biomal](http://www.biomal.ufscar.br/) | [CNPQ](https://www.gov.br/cnpq/pt-br) | [Ku Leuven](https://kulak.kuleuven.be/) | [Embarcados](https://www.embarcados.com.br/author/cissa/) | [Read Prensa](https://prensa.li/@cissa.gatto/) | [Linkedin Company](https://www.linkedin.com/company/27241216) | [Linkedin Profile](https://www.linkedin.com/in/elainececiliagatto/) | [Instagram](https://www.instagram.com/cissagatto) | [Facebook](https://www.facebook.com/cissagatto) | [Twitter](https://twitter.com/cissagatto) | [Twitch](https://www.twitch.tv/cissagatto) | [Youtube](https://www.youtube.com/CissaGatto) |
+
+
+---
+
+Start making good decisions with the Multi-label Friedman Nemenyi Tool today! 🚀 🎉
