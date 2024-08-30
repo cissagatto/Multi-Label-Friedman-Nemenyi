@@ -38,8 +38,8 @@ Welcome to the **Multi-Label Friedman-Nemenyi Analysis Toolkit**! This powerful 
 ```r
 # install.packages("devtools")
 library("devtools")
-devtools::install_github("https://github.com/cissagatto/pairComparison")
-library(pairComparison)
+devtools::install_github("https://github.com/cissagatto/MultiLabelFriedmanNemenyi")
+library(MultiLabelFriedmanNemenyi)
 ```
 
 ### Examples
