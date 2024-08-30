@@ -34,12 +34,13 @@ Welcome to the **Multi-Label Friedman-Nemenyi Analysis Toolkit**! This powerful 
 
 ### Installation
 
-Install the library:
-
-   ```r
-     library(MultiLabelFriedmanNemenyi)
-   ```
-
+    
+```r
+# install.packages("devtools")
+library("devtools")
+devtools::install_github("https://github.com/cissagatto/pairComparison")
+library(pairComparison)
+```
 
 ### Examples
 
