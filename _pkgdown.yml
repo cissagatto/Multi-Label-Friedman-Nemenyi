@@ -1,0 +1,5 @@
+template:
+  package: pkgdown
+  theme: default  # Use the default pkgdown theme or specify another built-in theme
+  light-switch: true  # Enable the light/dark mode switch
+

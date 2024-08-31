@@ -54,13 +54,13 @@ FolderResults = "~/MultiLabelFriedmanNemenyi/Results"
 # Set working directories and source necessary scripts
 ##############################################################################
 
-setwd(FolderScripts)
-source("libraries.R")
-source("utils.R")
-source("ranking.R")
-source("friedman-nemenyi.R")
+#setwd(FolderScripts)
+#source("libraries.R")
+#source("utils.R")
+#source("ranking.R")
+#source("friedman-nemenyi.R")
 
-#library(MultiLabelFriedmanNemenyi)
+library(MultiLabelFriedmanNemenyi)
 
 
 ##############################################################################
@@ -71,7 +71,7 @@ setwd(FolderRoot)
 clp = data.frame(read.csv("~/MultiLabelFriedmanNemenyi/Data/clp.csv"))
 clp = clp[,-1]
 
-df_res.mes <- measures()
+df_res.mes <- fn.measures()
 filtered_res.mes <- filter(df_res.mes, names == "clp")
 save = paste(FolderResults, "/clp", sep="")
 
