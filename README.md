@@ -120,13 +120,18 @@ for (file_path in full_paths) {
 
 ### Documentation
 
-For more detailed documentation on each function, check out the `~/MultiLabelFriedmanNemenyi/docs` folder
+For more detailed documentation on each function, check out the `~/WinTieLoss/docs` folder.
+A complete example is available in `~/WinTieLoss/example` folder.
 
 
-### R Example
+### Folder Structure
 
-You can fin a complete script R example in `~/MultiLabelFriedmanNemenyi/example` folder
+Ensure the following folder structure is set up:
 
+- `FolderRoot`: Root directory of the project.
+- `FolderData`: Directory where CSV data files are stored.
+- `FolderResults`: Directory where results and plots are saved.
+- 
 
 ## 📚 **Contributing**
 
