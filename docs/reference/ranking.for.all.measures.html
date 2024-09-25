@@ -64,11 +64,11 @@ and "1" categories, and stores these in separate files.</p>
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ranking.for.all.measures</span><span class="op">(</span></span>
-<span>  <span class="va">folder_names_csv</span>,</span>
-<span>  <span class="va">measure_names</span>,</span>
-<span>  <span class="va">my_methods</span>,</span>
+<span>  <span class="va">folder.names.csv</span>,</span>
+<span>  <span class="va">measure.names</span>,</span>
+<span>  <span class="va">my.methods</span>,</span>
 <span>  <span class="va">folders</span>,</span>
-<span>  <span class="va">results_mm</span></span>
+<span>  <span class="va">results.mm</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -76,43 +76,43 @@ and "1" categories, and stores these in separate files.</p>
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-folder-names-csv">folder_names_csv<a class="anchor" aria-label="anchor" href="#arg-folder-names-csv"></a></dt>
+<dl><dt id="arg-folder-names-csv">folder.names.csv<a class="anchor" aria-label="anchor" href="#arg-folder-names-csv"></a></dt>
 <dd><p>A vector of file names (without path) for the CSV files
 to be processed.</p></dd>
 
 
-<dt id="arg-measure-names">measure_names<a class="anchor" aria-label="anchor" href="#arg-measure-names"></a></dt>
+<dt id="arg-measure-names">measure.names<a class="anchor" aria-label="anchor" href="#arg-measure-names"></a></dt>
 <dd><p>A vector of names corresponding to the measures to be
 used for filtering rankings.</p></dd>
 
 
-<dt id="arg-my-methods">my_methods<a class="anchor" aria-label="anchor" href="#arg-my-methods"></a></dt>
+<dt id="arg-my-methods">my.methods<a class="anchor" aria-label="anchor" href="#arg-my-methods"></a></dt>
 <dd><p>A vector of method names that will be used as column names
 for the DataFrame created from the CSV files.</p></dd>
 
 
 <dt id="arg-folders">folders<a class="anchor" aria-label="anchor" href="#arg-folders"></a></dt>
 <dd><p>A list containing folder paths for different stages of saving
-results. This should include:</p><ul><li><p><code>FolderCSVs</code>: Path where the input CSV files are located.</p></li>
-<li><p><code>FolderRankings</code>: Path where individual ranking results should be saved.</p></li>
-<li><p><code>FolderAllRankings</code>: Path where all ranking averages should be saved.</p></li>
-<li><p><code>FolderMediaRankings</code>: Path where mean ranking results should be saved.</p></li>
+results. This should include:</p><ul><li><p><code>folder.csvs</code>: Path where the input CSV files are located.</p></li>
+<li><p><code>folder.rankings</code>: Path where individual ranking results should be saved.</p></li>
+<li><p><code>folder.all.rankings</code>: Path where all ranking averages should be saved.</p></li>
+<li><p><code>folder.media.rankings</code>: Path where mean ranking results should be saved.</p></li>
 </ul></dd>
 
 
-<dt id="arg-results-mm">results_mm<a class="anchor" aria-label="anchor" href="#arg-results-mm"></a></dt>
+<dt id="arg-results-mm">results.mm<a class="anchor" aria-label="anchor" href="#arg-results-mm"></a></dt>
 <dd><p>A list containing results with measures data, which includes
 information needed to determine which ranking method to apply.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list that is currently empty but can be extended to include
-  additional results or status information if needed.</p>
+    <p>A list containing the rankings calculated for each CSV file, organized
+  by the original filenames.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>The function processes each CSV file listed in <code>folder_names_csv</code>,
+    <p>The function processes each CSV file listed in <code>folder.names.csv</code>,
 applies the specified measures to generate rankings, and saves the results
 to the directories specified in <code>folders</code>. Rankings are saved with
 prefixes "0-" and "1-" to indicate the categories. Mean rankings for both
@@ -122,20 +122,20 @@ categories are also computed and saved.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example usage</span></span></span>
-<span class="r-in"><span><span class="va">folder_names_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"file1.csv"</span>, <span class="st">"file2.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">measure_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"measure1"</span>, <span class="st">"measure2"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">my_methods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"method1"</span>, <span class="st">"method2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">folder.names.csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"file1.csv"</span>, <span class="st">"file2.csv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">measure.names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"measure1"</span>, <span class="st">"measure2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">my.methods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"method1"</span>, <span class="st">"method2"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">folders</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  FolderCSVs <span class="op">=</span> <span class="st">"path/to/csvs"</span>,</span></span>
-<span class="r-in"><span>  FolderRankings <span class="op">=</span> <span class="st">"path/to/rankings"</span>,</span></span>
-<span class="r-in"><span>  FolderAllRankings <span class="op">=</span> <span class="st">"path/to/all_rankings"</span>,</span></span>
-<span class="r-in"><span>  FolderMediaRankings <span class="op">=</span> <span class="st">"path/to/media_rankings"</span></span></span>
+<span class="r-in"><span>  folder.csvs <span class="op">=</span> <span class="st">"path/to/csvs"</span>,</span></span>
+<span class="r-in"><span>  folder.rankings <span class="op">=</span> <span class="st">"path/to/rankings"</span>,</span></span>
+<span class="r-in"><span>  folder.all.rankings <span class="op">=</span> <span class="st">"path/to/all_rankings"</span>,</span></span>
+<span class="r-in"><span>  folder.media.rankings <span class="op">=</span> <span class="st">"path/to/media_rankings"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">results_mm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"measure1"</span>, <span class="st">"measure2"</span><span class="op">)</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">results.mm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"measure1"</span>, <span class="st">"measure2"</span><span class="op">)</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate and save rankings</span></span></span>
-<span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">ranking.for.all.measures</span><span class="op">(</span><span class="va">folder_names_csv</span>, <span class="va">measure_names</span>, <span class="va">my_methods</span>, <span class="va">folders</span>, <span class="va">results_mm</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot open file 'path/to/csvs/file1.csv': No such file or directory</span>
+<span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">ranking.for.all.measures</span><span class="op">(</span><span class="va">folder.names.csv</span>, <span class="va">measure.names</span>, <span class="va">my.methods</span>, <span class="va">folders</span>, <span class="va">results.mm</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot open file '/file1.csv': No such file or directory</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in file(file, "rt"):</span> cannot open the connection</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

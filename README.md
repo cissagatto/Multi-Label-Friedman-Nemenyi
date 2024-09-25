@@ -28,7 +28,7 @@ Welcome to the **Multi-Label Friedman-Nemenyi Analysis Toolkit**! This powerful 
 ### Prerequisites
 
 - R (version 4.0 or higher)
-- Necessary R packages: `dplyr`, `tools`, `ggplot2`, and any other dependencies listed in `libraries.R`.
+- Necessary R packages: `dplyr`, `tools`, `ggplot2`, `stringr`, `scmamp`, `openxlsx`, `writexl`.
 
 
 
@@ -46,7 +46,7 @@ library(MultiLabelFriedmanNemenyi)
 
 Here are some examples of how to use the toolkit:
 
-**Processing a Single File:**
+**For Measures with the best value equal to 0**
 
 ```r
 
@@ -56,36 +56,68 @@ clp = clp[,-1]
 
 df_res.mes <- fn.measures()
 filtered_res.mes <- filter(df_res.mes, names == "clp")
+
 save = paste(FolderResults, "/clp", sep="")
+if(dir.exists(save)==FALSE){dir.create(save)}
 
-if(filtered_res.mes$type==1){
-  # if the measure is type 1, isto é, o melhore valor é um
-    res = friedman.nemenyi(data = clp, save = save)
-  
-} else {
-  # if the measure is type 0, isto é, o melhor valor é zero
-  
-  ranking = generate.ranking(data = clp)
-  res.data = data.frame(ranking$rank.average.1) 
-  res.fn = friedman.nemenyi(data = res.data, save = save)
-}
-
+ranking = generate.ranking(data = clp)
+res.data = data.frame(ranking$rank.average.1) 
+res.fn = friedman.nemenyi(data = res.data , 
+                          save = save,
+                          measure.name = "clp",
+                          width = 60, 
+                          height = 30,
+                          cex=5.5)
 ```
 
-**Processing Multiple Files:**
+**For Measures with the best value equal to 1**
 
 ```r
 
+setwd(FolderRoot)
+accuracy = data.frame(read.csv("~/MultiLabelFriedmanNemenyi/Data/accuracy.csv"))
+accuracy = accuracy [,-1]
+
+df_res.mes <- fn.measures()
+filtered_res.mes <- filter(df_res.mes, names == "accuracy")
+
+save = paste(FolderResults, "/accuracy", sep="")
+if(dir.exists(save)==FALSE){dir.create(save)}
+
+res = friedman.nemenyi(data = accuracy, 
+                       save = save,
+                       measure.name = "accuracy",
+                       width = 60, 
+                       height = 30,
+                       cex=5.5)
+
+```
+
+**Processing Multiple CSV Files:**
+
+```r
+
+# Set the working directory to the data folder
 setwd(FolderData)
-current_dir <- getwd()
-files <- list.files(pattern = "\\.csv$", full.names = TRUE)  # List all CSV files
-full_paths <- sapply(files, function(file) normalizePath(file))
+current.dir <- getwd()
+
+# List all CSV files with full paths
+files <- list.files(pattern = "\\.csv$", full.names = TRUE)
+full.paths <- sapply(files, function(file) normalizePath(file))
+
+# Initialize a data frame to store the concatenated results
+all.results <- data.frame()
 
 # Process each CSV file
-for (file_path in full_paths) {
-  # Read the CSV file
-  data_name <- basename(file_path)  # Extract file name
-  data <- data.frame(read.csv(file_path))
+for (file.path in full.paths) {
+  
+  
+  #file.path = "C:/Users/Cissa/Documents/MultiLabelFriedmanNemenyi/Data/accuracy.csv"
+  # Extract the file name
+  data.name <- basename(file.path)
+  
+  # Read the CSV file into a data frame
+  data <- data.frame(read.csv(file.path))
   
   # Remove the first column
   data <- data[, -1]
@@ -93,35 +125,73 @@ for (file_path in full_paths) {
   # Generate rankings
   ranking <- generate.ranking(data = data)
   
-  # Get measure name from the file name (assuming the file name indicates the measure)
-  measure_name <- tools::file_path_sans_ext(data_name)
+  # Extract the measure name from the file name
+  measure.name <- tools::file_path_sans_ext(data.name)
   
-  # Load measures data
-  df_res.mes <- fn.measures()
-  filtered_res.mes <- filter(df_res.mes, names == measure_name)
+  # Load and filter measures data
+  df.res.mes <- fn.measures()
+  filtered.res.mes <- filter(df.res.mes, names == measure.name)
   
-  # Define the path to save results
-  save_path <- paste(FolderResults, "/", measure_name, sep = "")
-  
-  if (filtered_res.mes$type == 1) {
-    # If the measure is type 1, i.e., the best value is one
-    res <- friedman.nemenyi(data = data, save = save_path)
-    
-  } else {
-    # If the measure is type 0, i.e., the best value is zero
-    res_data <- data.frame(ranking$rank.average.1) 
-    res_fn <- friedman.nemenyi(data = res_data, save = save_path)
+  # Define the path to save the results
+  save.path <- file.path(FolderResults, measure.name)
+  if (!dir.exists(save.path)) {
+    dir.create(save.path)
   }
   
-  cat("\nProcessed file:", data_name)
+  # Save the rankings to an Excel file
+  file.name <- file.path(save.path, paste0(measure.name, "-ranking.xlsx"))
+  save.dataframes.to.excel(data.list = ranking, file.name = file.name)
+  
+  # Run Friedman-Nemenyi test and store the results
+  if (filtered.res.mes$type == 1) {
+    # If the measure is type 1, the best value is one
+    res <- friedman.nemenyi(data = data, 
+                            save = save.path,
+                            measure.name = measure.name,
+                            width = 60, 
+                            height = 30,
+                            cex = 5.5)
+    
+    # data, save.dir, measure.name, width = 7, height = 5, cex = 1.2
+    
+  } else {
+    # If the measure is type 0, the best value is zero
+    res.data <- data.frame(ranking$rank.average.1)
+    res <- friedman.nemenyi(data = res.data, 
+                            save = save.path,
+                            measure.name = measure.name,
+                            width = 60, 
+                            height = 30,
+                            cex = 5.5)
+  }
+  
+  # Concatenate the result to the all.results data frame
+  all.results <- rbind(all.results, res)
+  
+  # plotting boxplots
+  methods.names <- colnames(data)  
+  generate.boxplots(data = data,
+                    methods = methods.names, 
+                    save.dir = save.path,
+                    measure.name = measure.name,
+                    width = 20,
+                    height = 10)
+  
+  # Log the processed file
+  cat("\nProcessed file:", data.name, "\n")
 }
 
+
+measures <- tools::file_path_sans_ext(basename(files))
+nome.arquivo = paste(FolderResults, "/FN-results.xlsx", sep="")
+res = data.frame(measures, all.results)
+write_xlsx(res, nome.arquivo)
 ```
 
 ### Documentation
 
-For more detailed documentation on each function, check out the `~/WinTieLoss/docs` folder.
-A complete example is available in `~/WinTieLoss/example` folder.
+For more detailed documentation on each function, check out the `~/MultiLabelFriedmanNemenyi/docs` folder.
+A complete example is available in `~/MultiLabelFriedmanNemenyi/example` folder.
 
 
 ### Folder Structure
@@ -131,7 +201,7 @@ Ensure the following folder structure is set up:
 - `FolderRoot`: Root directory of the project.
 - `FolderData`: Directory where CSV data files are stored.
 - `FolderResults`: Directory where results and plots are saved.
-- 
+
 
 ## 📚 **Contributing**
 

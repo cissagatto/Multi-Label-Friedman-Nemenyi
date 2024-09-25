@@ -2,6 +2,8 @@
 
 export(fn.measures)
 export(friedman.nemenyi)
+export(generate.boxplots)
+export(generate.rank.again)
 export(generate.ranking)
-export(generates.rank.again)
 export(ranking.for.all.measures)
+export(save.dataframes.to.excel)

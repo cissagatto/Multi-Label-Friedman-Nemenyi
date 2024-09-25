@@ -47,13 +47,13 @@ FolderScripts = "~/MultiLabelFriedmanNemenyi/R"
 ##############################################################################
 #
 ##############################################################################
-setwd(FolderScripts)
-source("libraries.R")
-source("utils.R")
+# setwd(FolderScripts)
+# source("libraries.R")
+# source("utils.R")
 
 
 
-
+################################################################################
 #' Generate Various Types of Rankings for Each Row in a Dataset
 #'
 #' This function computes rankings for each row of a dataset using different 
@@ -197,119 +197,104 @@ generate.ranking <- function(data) {
 
 
 
-
+################################################################################
 #' Generate Rankings for CSV Files and Save Results
 #'
 #' This function processes a list of CSV files, generates rankings based on
-#' the provided columns, and saves the results in a specified destination folder.
-#' It handles different types of ranking based on the provided measure values.
+#' specified columns, and saves the results in a destination folder. It handles
+#' different types of ranking based on provided measure values.
 #'
 #' @param type A vector of column indices or names to select from the CSV files
 #'   for ranking. This determines which columns are included in the ranking.
-#' @param source_folder The folder path where the input CSV files are located.
-#' @param destination_folder The folder path where the ranking results will be saved.
-#'   Default is set to 'Folders', which should be defined in the user's 
-#'   environment.
-#' @param file_names A vector of file names (without path) for the CSV files to be 
+#' @param source.folder The folder path where the input CSV files are located.
+#' @param destination.folder The folder path where the ranking results will be saved.
+#'   Default is set to 'Folders', which should be defined in the user's environment.
+#' @param file.names A vector of file names (without path) for the CSV files to be 
 #'   processed.
-#' @param names_list A vector of names corresponding to the measures for each 
+#' @param names.list A vector of names corresponding to the measures for each 
 #'   CSV file.
 #'
 #' @return A list containing ranking results for each file. The list has an 
 #'   entry for each file, with the rankings stored as data frames.
 #'
 #' @details
-#' The function reads CSV files from the `source_folder`, processes each file by
+#' The function reads CSV files from the `source.folder`, processes each file by
 #' generating rankings based on the specified columns (`type`), and saves the 
-#' rankings to the `destination_folder`. The measure values from `names_list` determine
+#' rankings to the `destination.folder`. The measure values from `names.list` determine
 #' which ranking is saved. If the measure value is 1, it saves the rankings in 
 #' reverse order; otherwise, it saves them in the original order.
 #'
 #' @examples
 #' # Example usage
 #' type <- c("Column1", "Column2")
-#' source_folder <- "path/to/source"
-#' destination_folder <- "path/to/destination"
-#' file_names <- c("file1.csv", "file2.csv")
-#' names_list <- c("measure1", "measure2")
+#' source.folder <- "path/to/source"
+#' destination.folder <- "path/to/destination"
+#' file.names <- c("file1.csv", "file2.csv")
+#' names.list <- c("measure1", "measure2")
 #' 
 #' # Generate and save rankings
-#' results <- generates.rank.again(type, source_folder, destination_folder, file_names, names_list)
+#' results <- generate.rank.again(type, source.folder, destination.folder, file.names, names.list)
 #'
 #' @export
-generates.rank.again <- function(type, 
-                                 source_folder, 
-                                 destination_folder = Folders, 
-                                 file_names, 
-                                 names_list) {
+generate.rank.again <- function(type, 
+                                source.folder, 
+                                destination.folder, 
+                                file.names, 
+                                names.list) {
   
   # Initialize list to store ranking results
-  result <- list()
+  results <- list()
   
-  index <- 1
-  while (index <= length(file_names)) {
+  # Loop through each file name
+  for (index in seq_along(file.names)) {
     
-    # Construct the file path
-    file_path <- paste(source_folder, "/", file_names[index], sep = "")
+    # Construct the file path and read the CSV file
+    file.path <- file.path(source.folder, file.names[index])
+    data <- read.csv2(file.path, stringsAsFactors = FALSE)
     
-    # Read the CSV file and format the dataframe
-    data <- data.frame(read.csv2(file_path))
+    # Process the data: replace NA values with 0 and select specific columns
+    data[is.na(data)] <- 0
+    data <- data[, type, drop = FALSE]
     
-    # Replace NA values with zero
-    data <- data %>% replace(is.na(.), 0)
-    
-    # Remove the first column
-    data <- data[, -1]
-    
-    # Select specific columns based on the 'type' argument
-    data <- data[, type]
-    
-    # Generate rankings for the data
+    # Generate rankings for the selected data
     rankings <- generate.ranking(data)
     
-    # Filter the 'measures' data frame for the current 'names_list' value
-    measure <- filter(measures, measures$names == names_list[index])
+    # Filter the measures data frame for the current 'names.list' value
+    measure <- subset(measures, names == names.list[index])
     
-    # Create file name for saving the rankings
-    file_name <- paste(names_list[index], "-ranking.csv", sep = "")  
+    # Prepare the destination path and create it if it does not exist
+    root.folder <- file.path(FolderRoot, "Rankings")
+    if (!dir.exists(root.folder)) dir.create(root.folder)
     
-    # Create directory to store results if it does not exist
-    root_folder <- paste(FolderRoot, "/Rankings", sep = "")
-    if (!dir.exists(root_folder)) {
-      dir.create(root_folder)
-    }
+    # Create Destination Path
+    destination.path <- file.path(root.folder, destination.folder)
+    if (!dir.exists(destination.path)) dir.create(destination.path)
     
-    destination_path <- paste(root_folder, "/", destination_folder, sep = "")
-    if (!dir.exists(destination_path)) {
-      dir.create(destination_path)
-    }
+    # Determine file name and save the appropriate ranking based on the measure value
+    file.name <- paste0(names.list[index], "-ranking.csv")
+    setwd(destination.path)
     
-    # Save the appropriate ranking based on the measure value
     if (measure$values == 1) {
-      cat("\n1 \t", names_list[index])
-      setwd(destination_path)
-      write.csv(rankings$rank.average.1, file_name, row.names = FALSE)
-      result$rank[[index]] <- rankings$rank.average.1
-      
+      write.csv(rankings$rank.average.1, file.name, row.names = FALSE)
+      results[[index]] <- rankings$rank.average.1
     } else {
-      cat("\n0 \t", names_list[index])
-      setwd(destination_path)
-      write.csv(rankings$rank.average.0, file_name, row.names = FALSE)  
-      result$rank[[index]] <- rankings$rank.average.0
+      write.csv(rankings$rank.average.0, file.name, row.names = FALSE)
+      results[[index]] <- rankings$rank.average.0
     }
     
-    # Move to the next file
-    index <- index + 1
-    gc()  # Call garbage collection to free up memory
-    
+    # Garbage collection to free up memory
+    gc()
   }
   
-  # Return the result list containing all ranking data
-  return(result)
+  # Return the list containing all ranking results
+  return(results)
 }
 
 
 
+
+
+################################################################################
 #' Generate Rankings for All Measures in a Set of CSV Files
 #'
 #' This function processes a list of CSV files, computes rankings based on
@@ -318,28 +303,28 @@ generates.rank.again <- function(type,
 #' ranking results. The function also generates mean rankings for both "0"
 #' and "1" categories, and stores these in separate files.
 #'
-#' @param folder_names_csv A vector of file names (without path) for the CSV files
+#' @param folder.names.csv A vector of file names (without path) for the CSV files
 #'   to be processed.
-#' @param measure_names A vector of names corresponding to the measures to be 
+#' @param measure.names A vector of names corresponding to the measures to be 
 #'   used for filtering rankings.
-#' @param my_methods A vector of method names that will be used as column names 
+#' @param my.methods A vector of method names that will be used as column names 
 #'   for the DataFrame created from the CSV files.
 #' @param folders A list containing folder paths for different stages of saving 
 #'   results. This should include:
 #'   \itemize{
-#'     \item \code{FolderCSVs}: Path where the input CSV files are located.
-#'     \item \code{FolderRankings}: Path where individual ranking results should be saved.
-#'     \item \code{FolderAllRankings}: Path where all ranking averages should be saved.
-#'     \item \code{FolderMediaRankings}: Path where mean ranking results should be saved.
+#'     \item \code{folder.csvs}: Path where the input CSV files are located.
+#'     \item \code{folder.rankings}: Path where individual ranking results should be saved.
+#'     \item \code{folder.all.rankings}: Path where all ranking averages should be saved.
+#'     \item \code{folder.media.rankings}: Path where mean ranking results should be saved.
 #'   }
-#' @param results_mm A list containing results with measures data, which includes
+#' @param results.mm A list containing results with measures data, which includes
 #'   information needed to determine which ranking method to apply.
 #'
-#' @return A list that is currently empty but can be extended to include
-#'   additional results or status information if needed.
+#' @return A list containing the rankings calculated for each CSV file, organized
+#'   by the original filenames.
 #'
 #' @details
-#' The function processes each CSV file listed in \code{folder_names_csv}, 
+#' The function processes each CSV file listed in \code{folder.names.csv}, 
 #' applies the specified measures to generate rankings, and saves the results
 #' to the directories specified in \code{folders}. Rankings are saved with 
 #' prefixes "0-" and "1-" to indicate the categories. Mean rankings for both 
@@ -347,102 +332,126 @@ generates.rank.again <- function(type,
 #'
 #' @examples
 #' # Example usage
-#' folder_names_csv <- c("file1.csv", "file2.csv")
-#' measure_names <- c("measure1", "measure2")
-#' my_methods <- c("method1", "method2")
+#' folder.names.csv <- c("file1.csv", "file2.csv")
+#' measure.names <- c("measure1", "measure2")
+#' my.methods <- c("method1", "method2")
 #' folders <- list(
-#'   FolderCSVs = "path/to/csvs",
-#'   FolderRankings = "path/to/rankings",
-#'   FolderAllRankings = "path/to/all_rankings",
-#'   FolderMediaRankings = "path/to/media_rankings"
+#'   folder.csvs = "path/to/csvs",
+#'   folder.rankings = "path/to/rankings",
+#'   folder.all.rankings = "path/to/all_rankings",
+#'   folder.media.rankings = "path/to/media_rankings"
 #' )
-#' results_mm <- list(measures = data.frame(names = c("measure1", "measure2"), values = c(0, 1)))
+#' results.mm <- list(measures = data.frame(names = c("measure1", "measure2"), values = c(0, 1)))
 #' 
 #' # Generate and save rankings
-#' results <- ranking.for.all.measures(folder_names_csv, measure_names, my_methods, folders, results_mm)
+#' results <- ranking.for.all.measures(folder.names.csv, measure.names, my.methods, folders, results.mm)
 #'
 #' @export
-ranking.for.all.measures <- function(folder_names_csv, measure_names,
-                                     my_methods, folders, results_mm) {
+ranking.for.all.measures <- function(folder.names.csv, 
+                                     measure.names,
+                                     my.methods, 
+                                     folders, 
+                                     results.mm) {
   
-  # Initialize list to store results
-  result <- list()
-  
-  # Initialize data frames to store combined results
-  temp_0 <- data.frame(0)
-  temp_1 <- data.frame(0)
+  # Initialize list to store results for each file
+  results <- list()
   
   # Extract measures data from the results
-  measures <- results_mm$measures
+  measures <- results.mm$measures
   
   # Process each CSV file
-  for (i in 1:length(folder_names_csv)) {
+  for (i in seq_along(folder.names.csv)) {
     
-    # Construct the file path
-    file_path <- paste(folders$FolderCSVs, "/", folder_names_csv[i], sep = "")
+    # Construct the file path and read the CSV file
+    file.path <- file.path(folders$folder.csvs, folder.names.csv[i])
+    data <- read.csv(file.path, stringsAsFactors = FALSE)
     
-    # Read the CSV file and format the dataframe
-    data <- data.frame(read.csv(file_path))
-    
-    # Remove the first column
-    data <- data[, -1]
-    
-    # Replace NA values with zero
+    # Process the data: remove the first column, replace NA with 0, and set column names
+    data <- data[ , -1, drop = FALSE]
     data[is.na(data)] <- 0
-    
-    # Set column names based on provided methods
-    colnames(data) <- my_methods
+    colnames(data) <- my.methods
     
     # Generate rankings for the data
-    rankings <- generate_ranking(data)
+    rankings <- generate.ranking(data)
     
-    # Filter the 'measures' data frame for the current measure name
-    measure_value <- filter(measures, measures$names == measure_names[i])
+    # Filter the measures data frame for the current measure name
+    measure.value <- measures[measures$names == measure.names[i], "values"]
     
-    # Create file name for saving the rankings
-    file_name <- paste(measure_names[i], "-ranking.csv", sep = "")
+    # Define file name for saving rankings
+    file.name <- paste0(measure.names[i], "-ranking.csv")
     
-    # Save the ranking data based on the measure value
-    if (measure_value$values == 1) {
-      cat("\n1 \t", measure_names[i])
-      setwd(folders$FolderRankings)
-      write.csv(rankings$rank_average_0, file_name, row.names = FALSE)
+    # Set working directory and save the ranking data based on the measure value
+    setwd(folders$folder.rankings)
+    if (measure.value == 1) {
+      write.csv(rankings$rank.average.0, file.name, row.names = FALSE)
+      results[[folder.names.csv[i]]]$rank.average.0 <- rankings$rank.average.0
     } else {
-      cat("\n0 \t", measure_names[i])
-      setwd(folders$FolderRankings)
-      write.csv(rankings$rank_average_1, file_name, row.names = FALSE)
+      write.csv(rankings$rank.average.1, file.name, row.names = FALSE)
+      results[[folder.names.csv[i]]]$rank.average.1 <- rankings$rank.average.1
     }
     
-    # Save all ranking averages with prefix "0-"
-    setwd(folders$FolderAllRankings)
-    all_rankings_0 <- paste("0-", file_name, sep = "")
-    write.csv(rankings$rank_average_0, all_rankings_0, row.names = FALSE)
+    # Save all ranking averages with prefixes "0-" and "1-"
+    setwd(folders$folder.all.rankings)
+    write.csv(rankings$rank.average.0, paste0("0-", file.name), row.names = FALSE)
+    write.csv(rankings$rank.average.1, paste0("1-", file.name), row.names = FALSE)
     
-    # Save all ranking averages with prefix "1-"
-    all_rankings_1 <- paste("1-", file_name, sep = "")
-    write.csv(rankings$rank_average_1, all_rankings_1, row.names = FALSE)
+    # Compute and save the mean rankings for "0" and "1" categories
+    setwd(folders$folder.media.rankings)
+    mean.rankings.0 <- data.frame(mean = rowMeans(rankings$rank.average.0, na.rm = TRUE))
+    write.csv(mean.rankings.0, paste0("mean-0-", file.name), row.names = FALSE)
+    results[[folder.names.csv[i]]]$mean.rankings.0 <- mean.rankings.0
     
-    # Save the mean of average rankings for "0" and "1"
-    setwd(folders$FolderMediaRankings)
-    mean_rankings_0 <- data.frame(apply(rankings$rank_average_0, 2, mean))
-    colnames(mean_rankings_0) <- "mean"
-    mean_file_0 <- paste("mean-", file_name, sep = "")
-    write.csv(mean_rankings_0, mean_file_0)
-    temp_0 <- cbind(temp_0, mean_rankings_0)
+    mean.rankings.1 <- data.frame(mean = rowMeans(rankings$rank.average.1, na.rm = TRUE))
+    write.csv(mean.rankings.1, paste0("mean-1-", file.name), row.names = FALSE)
+    results[[folder.names.csv[i]]]$mean.rankings.1 <- mean.rankings.1
     
-    mean_rankings_1 <- data.frame(apply(rankings$rank_average_1, 2, mean))
-    colnames(mean_rankings_1) <- "mean"
-    mean_file_1 <- paste("1-mean-", file_name, sep = "")
-    write.csv(mean_rankings_1, mean_file_1)
-    temp_1 <- cbind(temp_1, mean_rankings_1)
-    
-    # Move to the next file
-    gc()  # Call garbage collection to free up memory
+    # Garbage collection to free up memory
+    gc()
   }
   
-  # Return the result list (currently empty, but can be extended)
-  return(result)
+  # Return the list containing all ranking data
+  return(results)
 }
+
+
+
+################################################################################
+#' Save Multiple Dataframes to an Excel Workbook
+#'
+#' This function creates an Excel workbook and adds each dataframe from a given 
+#' list as a separate sheet.
+#' The name of each sheet corresponds to the name of the dataframe in the list.
+#'
+#' @param data.list A named list of dataframes to be written to the Excel workbook.
+#' @param file.name A string specifying the file name for the Excel workbook, 
+#' including the `.xlsx` extension.
+#' @return None. The function saves the Excel workbook to the specified file.
+#' @examples
+#' # Example usage:
+#' # data.list <- list("Sheet1" = df1, "Sheet2" = df2)
+#' # save.dataframes.to.excel(data.list, "output.xlsx")
+#' @export
+save.dataframes.to.excel <- function(data.list, file.name) {
+  # Create a new Excel workbook
+  excel.file <- createWorkbook()
+  
+  # Loop over each dataframe in the list and add it as a sheet
+  for (sheet.name in names(data.list)) {
+    # Add a sheet with the corresponding name
+    addWorksheet(excel.file, sheet.name)
+    
+    # Write the dataframe to the corresponding sheet
+    writeData(excel.file, sheet.name, data.list[[sheet.name]])
+  }
+  
+  # Save the Excel workbook
+  saveWorkbook(excel.file, file.name, overwrite = TRUE)
+  
+  # Print a message indicating the file was saved successfully
+  message("The Excel file '", file.name, "' has been saved successfully.")
+  cat("\n")
+}
+
 
 
 

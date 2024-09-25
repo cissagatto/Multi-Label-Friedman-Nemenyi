@@ -2,52 +2,51 @@
 % Please edit documentation in R/friedman-nemenyi.R
 \name{friedman.nemenyi}
 \alias{friedman.nemenyi}
-\title{Perform Friedman Test Followed by Nemenyi Post-Hoc Test}
+\title{Perform Friedman Test and Nemenyi Post-Hoc Analysis with Output Saving}
 \usage{
-friedman.nemenyi(data, save)
+friedman.nemenyi(data, save, measure.name, width = 7, height = 5, cex = 1.2)
 }
 \arguments{
-\item{data}{A data frame containing the results of multiple methods. Each
-row should represent a different method, and columns should represent the
-observations or measurements.}
+\item{data}{A data frame where each row represents a method and each column represents an observation or measurement.}
 
-\item{save}{A string specifying the base name for output files. The function
-will use this base name to save the difference matrix, Critical Difference
-plot, and p-values plot.}
+\item{measure.name}{A string used as the base name for output files.}
+
+\item{width}{Numeric value indicating the width of the PDF plots.}
+
+\item{height}{Numeric value indicating the height of the PDF plots.}
+
+\item{cex}{Numeric value controlling the size of text in the plots.}
+
+\item{save.dir}{A string specifying the directory where output files will be saved.}
 }
 \value{
 A data frame with the following columns:
-  \itemize{
-    \item \code{f.ChiSquare}: The Chi-Square statistic from the Friedman test.
-    \item \code{f.pValue}: The p-value from the Friedman test.
-    \item \code{f.Method}: The method used for the Friedman test.
-    \item \code{n.CriticalDifference}: The Critical Difference from the Nemenyi test.
-    \item \code{result}: A string indicating whether the methods are significantly different.
+  \describe{
+    \item{\code{ChiSquare}}{The Chi-Square statistic from the Friedman test.}
+    \item{\code{pValue}}{The p-value from the Friedman test.}
+    \item{\code{Method}}{The method used for the Friedman test.}
+    \item{\code{CriticalDifference}}{The Critical Difference from the Nemenyi test.}
+    \item{\code{Result}}{Indicates whether the methods are significantly different.}
   }
 }
 \description{
-This function performs the Friedman test on the provided data to assess
-if there are significant differences among multiple methods. If the
-Friedman test indicates significant differences, the function then performs
-the Nemenyi post-hoc test to determine which methods are significantly different.
-The results are saved as CSV and PDF files, including the difference matrix,
-Critical Difference (CD) plot, and p-values plot.
+This function conducts a Friedman test to evaluate significant differences among multiple methods
+based on provided data. If significant differences are detected, the function proceeds with a 
+Nemenyi post-hoc test to identify which methods differ significantly. The results, including a 
+difference matrix, Critical Difference (CD) plot, and p-values plot, are saved as CSV and PDF files.
 }
 \details{
-The function saves three outputs:
-\itemize{
-  \item A CSV file with the name \code{paste(save, "-diff-matrix.txt", sep="")} containing
-    the difference matrix from the Nemenyi post-hoc test.
-  \item A PDF file with the name \code{paste(save, ".pdf", sep="")} containing the Critical
-    Difference (CD) plot.
-  \item A PDF file with the name \code{paste(save, "-pValues.pdf", sep="")} containing
-    the p-values plot.
+The function saves the following files:
+\describe{
+  \item{CSV File}{A CSV file containing the results data frame.}
+  \item{Difference Matrix}{A CSV file containing the difference matrix from the Nemenyi post-hoc test.}
+  \item{CD Plot}{A PDF file containing the Critical Difference plot.}
+  \item{p-Values Plot}{A PDF file containing the p-values plot.}
 }
 }
 \examples{
-# Example usage
-# Assume 'my_data' is a data frame with results for different methods
-# and 'base_name' is the base name for output files
-result <- friedman.nemenyi(my_data, "base_name")
+# Example usage:
+# Assuming 'my_data' is a data frame and 'output_dir' is the directory for saving outputs
+result <- friedman.nemenyi(my_data, "output.dir", "my.measure", 7, 5, 1.2)
 
 }

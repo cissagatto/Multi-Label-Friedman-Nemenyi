@@ -51,7 +51,11 @@ devtools::install_github("b0rxa/scmamp")
 
 library(stringr)
 library(scmamp)
+library(ggplot2)
 library(dplyr)
+library(tidyr)
+library(openxlsx)
+library(writexl)
 
 
 

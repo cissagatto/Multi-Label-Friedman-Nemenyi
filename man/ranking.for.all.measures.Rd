@@ -5,38 +5,38 @@
 \title{Generate Rankings for All Measures in a Set of CSV Files}
 \usage{
 ranking.for.all.measures(
-  folder_names_csv,
-  measure_names,
-  my_methods,
+  folder.names.csv,
+  measure.names,
+  my.methods,
   folders,
-  results_mm
+  results.mm
 )
 }
 \arguments{
-\item{folder_names_csv}{A vector of file names (without path) for the CSV files
+\item{folder.names.csv}{A vector of file names (without path) for the CSV files
 to be processed.}
 
-\item{measure_names}{A vector of names corresponding to the measures to be 
+\item{measure.names}{A vector of names corresponding to the measures to be 
 used for filtering rankings.}
 
-\item{my_methods}{A vector of method names that will be used as column names 
+\item{my.methods}{A vector of method names that will be used as column names 
 for the DataFrame created from the CSV files.}
 
 \item{folders}{A list containing folder paths for different stages of saving 
 results. This should include:
 \itemize{
-  \item \code{FolderCSVs}: Path where the input CSV files are located.
-  \item \code{FolderRankings}: Path where individual ranking results should be saved.
-  \item \code{FolderAllRankings}: Path where all ranking averages should be saved.
-  \item \code{FolderMediaRankings}: Path where mean ranking results should be saved.
+  \item \code{folder.csvs}: Path where the input CSV files are located.
+  \item \code{folder.rankings}: Path where individual ranking results should be saved.
+  \item \code{folder.all.rankings}: Path where all ranking averages should be saved.
+  \item \code{folder.media.rankings}: Path where mean ranking results should be saved.
 }}
 
-\item{results_mm}{A list containing results with measures data, which includes
+\item{results.mm}{A list containing results with measures data, which includes
 information needed to determine which ranking method to apply.}
 }
 \value{
-A list that is currently empty but can be extended to include
-  additional results or status information if needed.
+A list containing the rankings calculated for each CSV file, organized
+  by the original filenames.
 }
 \description{
 This function processes a list of CSV files, computes rankings based on
@@ -46,7 +46,7 @@ ranking results. The function also generates mean rankings for both "0"
 and "1" categories, and stores these in separate files.
 }
 \details{
-The function processes each CSV file listed in \code{folder_names_csv}, 
+The function processes each CSV file listed in \code{folder.names.csv}, 
 applies the specified measures to generate rankings, and saves the results
 to the directories specified in \code{folders}. Rankings are saved with 
 prefixes "0-" and "1-" to indicate the categories. Mean rankings for both 
@@ -54,18 +54,18 @@ categories are also computed and saved.
 }
 \examples{
 # Example usage
-folder_names_csv <- c("file1.csv", "file2.csv")
-measure_names <- c("measure1", "measure2")
-my_methods <- c("method1", "method2")
+folder.names.csv <- c("file1.csv", "file2.csv")
+measure.names <- c("measure1", "measure2")
+my.methods <- c("method1", "method2")
 folders <- list(
-  FolderCSVs = "path/to/csvs",
-  FolderRankings = "path/to/rankings",
-  FolderAllRankings = "path/to/all_rankings",
-  FolderMediaRankings = "path/to/media_rankings"
+  folder.csvs = "path/to/csvs",
+  folder.rankings = "path/to/rankings",
+  folder.all.rankings = "path/to/all_rankings",
+  folder.media.rankings = "path/to/media_rankings"
 )
-results_mm <- list(measures = data.frame(names = c("measure1", "measure2"), values = c(0, 1)))
+results.mm <- list(measures = data.frame(names = c("measure1", "measure2"), values = c(0, 1)))
 
 # Generate and save rankings
-results <- ranking.for.all.measures(folder_names_csv, measure_names, my_methods, folders, results_mm)
+results <- ranking.for.all.measures(folder.names.csv, measure.names, my.methods, folders, results.mm)
 
 }
